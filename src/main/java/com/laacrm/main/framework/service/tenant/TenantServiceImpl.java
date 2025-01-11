@@ -43,4 +43,32 @@ public class TenantServiceImpl implements TenantService {
         }
     }
 
+    @Override
+    public Tenant getNextAvailableTenant() {
+        return tenantRepo.findFirstByIsActiveFalse().orElse(null);
+    }
+
+    @Override
+    public Ranges getNextAvailableRange(){
+        return rangeRepo.findFirstByTenantIsNull().orElse(null);
+    }
+
+    @Override
+    public Tenant saveTenant(Tenant tenant) {
+        return tenantRepo.save(tenant);
+    }
+
+    @Override
+    public Ranges saveRange(Ranges range) {
+        return rangeRepo.save(range);
+    }
+
+    @Override
+    public Ranges allocateRangeForTenant(Tenant tenant) {
+        Ranges range = getNextAvailableRange();
+        range.setTenant(tenant);
+        saveRange(range);
+        return null;
+    }
+
 }

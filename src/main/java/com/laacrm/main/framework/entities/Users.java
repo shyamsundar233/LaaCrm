@@ -2,7 +2,6 @@ package com.laacrm.main.framework.entities;
 
 import jakarta.persistence.*;
 import jakarta.validation.constraints.Email;
-import jakarta.validation.constraints.Size;
 import lombok.Data;
 import org.springframework.security.core.GrantedAuthority;
 import org.springframework.security.core.userdetails.UserDetails;
@@ -24,7 +23,7 @@ public class Users implements UserDetails {
     @Column(unique = true, nullable = false)
     private String userName;
 
-    @Column(unique = true, nullable = false)
+    @Column(nullable = false)
     private String password;
 
     @Column(unique = true, nullable = false)
@@ -34,15 +33,19 @@ public class Users implements UserDetails {
     @Column(unique = true, nullable = false)
     private String phone;
 
-    @Column(unique = true, nullable = false)
+    @Column(nullable = false)
     private String firstName;
 
-    @Column(unique = true, nullable = false)
+    @Column(nullable = false)
     private String lastName;
 
     @ManyToOne(fetch = FetchType.EAGER, cascade = CascadeType.ALL)
     @JoinColumn(name = "role_id")
     private Role role;
+
+    @ManyToOne
+    @JoinColumn(name = "tenant_id")
+    private Tenant tenant;
 
     @Override
     public Collection<? extends GrantedAuthority> getAuthorities() {

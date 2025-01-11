@@ -1,9 +1,11 @@
 package com.laacrm.main.framework.service.users;
 
+import com.laacrm.main.framework.entities.Tenant;
 import com.laacrm.main.framework.entities.Users;
 import com.laacrm.main.framework.exception.FrameworkException;
 import com.laacrm.main.framework.repo.UsersRepo;
 import com.laacrm.main.framework.service.role.RoleService;
+import com.laacrm.main.framework.service.tenant.TenantService;
 import jakarta.transaction.Transactional;
 import lombok.AllArgsConstructor;
 import org.springframework.http.HttpStatus;
@@ -25,6 +27,7 @@ public class UserServiceImpl implements UserService {
 
     private final UsersRepo usersRepo;
     private final RoleService roleService;
+    private final TenantService tenantService;
     private final AuthenticationManager authenticationManager;
     private final PasswordEncoder passwordEncoder;
 
@@ -52,7 +55,15 @@ public class UserServiceImpl implements UserService {
                 userDetails.getLastName(),
                 roleService.getRoleByName(userDetails.getRoleName())
         );
+        Tenant nextAvailableTenant = tenantService.getNextAvailableTenant();
+        if(nextAvailableTenant == null) {
+            throw new FrameworkException(HttpStatus.INSUFFICIENT_STORAGE.value(), "No Tenant Available");
+        }
+        users.setTenant(nextAvailableTenant);
         users = usersRepo.save(users);
+        tenantService.allocateRangeForTenant(nextAvailableTenant);
+        nextAvailableTenant.setIsActive(Boolean.TRUE);
+        tenantService.saveTenant(nextAvailableTenant);
         LOGGER.log(Level.INFO, "==========> User Creation Successful :: {0} <==========", users.getUserCode());
         users.setUserId(users.getUserId());
         return userDetails;
