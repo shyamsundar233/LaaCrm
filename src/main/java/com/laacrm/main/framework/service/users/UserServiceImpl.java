@@ -40,6 +40,7 @@ public class UserServiceImpl implements UserService {
         createUserValidation(userDetails);
         Users users = new Users(
                 userDetails.getUserName(),
+                generateUserCode(),
                 userDetails.getPassword(),
                 userDetails.getEmail(),
                 userDetails.getPhone(),
@@ -98,5 +99,11 @@ public class UserServiceImpl implements UserService {
             throw new FrameworkException(HttpStatus.BAD_REQUEST.value(), message);
         }
         LOGGER.log(Level.INFO, "==========> User Creation Validation Completed <==========");
+    }
+
+    private String generateUserCode() {
+        Long maxSuffix = usersRepo.findMaxUserCodeSuffix();
+        maxSuffix = (maxSuffix == null) ? 1 : maxSuffix + 1;
+        return "USR-" + String.format("%05d", maxSuffix);
     }
 }

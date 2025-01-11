@@ -1,6 +1,8 @@
 package com.laacrm.main.framework.entities;
 
 import jakarta.persistence.*;
+import jakarta.validation.constraints.Email;
+import jakarta.validation.constraints.Size;
 import lombok.Data;
 import org.springframework.security.core.GrantedAuthority;
 import org.springframework.security.core.userdetails.UserDetails;
@@ -16,18 +18,31 @@ public class Users implements UserDetails {
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     private Long userId;
 
+    @Column(unique = true, nullable = false)
     private String userCode;
 
+    @Column(unique = true, nullable = false)
+    @Size(min = 5, max = 50)
     private String userName;
 
+    @Column(unique = true, nullable = false)
+    @Size(min = 8, max = 50)
     private String password;
 
+    @Column(unique = true, nullable = false)
+    @Email(message = "Enter a valid email for user")
     private String email;
 
+    @Column(unique = true, nullable = false)
+    @Size(min = 10, max = 50)
     private String phone;
 
+    @Column(unique = true, nullable = false)
+    @Size(min = 10, max = 100)
     private String firstName;
 
+    @Column(unique = true, nullable = false)
+    @Size(min = 10, max = 100)
     private String lastName;
 
     @ManyToOne(fetch = FetchType.EAGER, cascade = CascadeType.ALL)
@@ -66,8 +81,9 @@ public class Users implements UserDetails {
 
     public Users() {}
 
-    public Users(String userName, String password, String email, String phone, String firstName, String lastName, Role role) {
+    public Users(String userName, String userCode, String password, String email, String phone, String firstName, String lastName, Role role) {
         this.userName = userName;
+        this.userCode = userCode;
         this.password = password;
         this.email = email;
         this.phone = phone;
