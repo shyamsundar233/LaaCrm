@@ -4,6 +4,7 @@ import lombok.Getter;
 import lombok.Setter;
 import org.json.JSONObject;
 
+@Getter
 public class APIException extends RuntimeException {
 
     @Getter
@@ -29,10 +30,6 @@ public class APIException extends RuntimeException {
         this.response.setCode(String.valueOf(code));
         this.response.setMessage(message);
         this.response.setDetails(details);
-    }
-
-    public ErrorResponse getResponse() {
-        return response;
     }
 
 }

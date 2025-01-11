@@ -10,6 +10,8 @@ public interface UsersRepo extends JpaRepository<Users, Long> {
 
     Optional<Users> findByEmail(String email);
 
+    Optional<Users> findByUserName(String username);
+
     @Query("SELECT SUBSTRING(u.userCode, 5) FROM Users u WHERE u.userCode LIKE 'USR-%' ORDER BY SUBSTRING(u.userCode, 5) DESC")
     Long findMaxUserCodeSuffix();
 

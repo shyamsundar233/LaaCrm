@@ -7,6 +7,9 @@ import com.laacrm.main.framework.service.role.RoleService;
 import jakarta.transaction.Transactional;
 import lombok.AllArgsConstructor;
 import org.springframework.http.HttpStatus;
+import org.springframework.security.authentication.AuthenticationManager;
+import org.springframework.security.authentication.UsernamePasswordAuthenticationToken;
+import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.stereotype.Service;
 
 import java.util.List;
@@ -21,8 +24,9 @@ public class UserServiceImpl implements UserService {
     private final Logger LOGGER = Logger.getLogger(UserServiceImpl.class.getName());
 
     private final UsersRepo usersRepo;
-
     private final RoleService roleService;
+    private final AuthenticationManager authenticationManager;
+    private final PasswordEncoder passwordEncoder;
 
     @Override
     public List<UserDTO> getAllUsers() {
@@ -41,7 +45,7 @@ public class UserServiceImpl implements UserService {
         Users users = new Users(
                 userDetails.getUserName(),
                 generateUserCode(),
-                userDetails.getPassword(),
+                passwordEncoder.encode(userDetails.getPassword()),
                 userDetails.getEmail(),
                 userDetails.getPhone(),
                 userDetails.getFirstName(),
@@ -57,6 +61,25 @@ public class UserServiceImpl implements UserService {
     @Override
     public void deleteUser(Long userId) {
 
+    }
+
+    @Override
+    public Users authenticateUser(LoginUser loginUserDetails) {
+        try{
+            Users loginUser = loginUserDetails.getUsername() != null && !loginUserDetails.getUsername().isEmpty() ?
+                        usersRepo.findByUserName(loginUserDetails.getUsername()).orElseThrow(() -> new FrameworkException(HttpStatus.UNAUTHORIZED.value(), "User not found, Username is invalid")) :
+                        usersRepo.findByEmail(loginUserDetails.getEmail()).orElseThrow(() -> new FrameworkException(HttpStatus.UNAUTHORIZED.value(), "User not found, Email is invalid"));
+            authenticationManager.authenticate(
+                    new UsernamePasswordAuthenticationToken(
+                            loginUserDetails.getEmail(),
+                            loginUserDetails.getPassword()
+                    )
+            );
+
+            return loginUser;
+        } catch (Exception exp) {
+            throw new FrameworkException(HttpStatus.UNAUTHORIZED.value(), exp.getMessage());
+        }
     }
 
     private void createUserValidation(UserDTO userDetails) {

@@ -22,11 +22,9 @@ public class Users implements UserDetails {
     private String userCode;
 
     @Column(unique = true, nullable = false)
-    @Size(min = 5, max = 50)
     private String userName;
 
     @Column(unique = true, nullable = false)
-    @Size(min = 8, max = 50)
     private String password;
 
     @Column(unique = true, nullable = false)
@@ -34,15 +32,12 @@ public class Users implements UserDetails {
     private String email;
 
     @Column(unique = true, nullable = false)
-    @Size(min = 10, max = 50)
     private String phone;
 
     @Column(unique = true, nullable = false)
-    @Size(min = 10, max = 100)
     private String firstName;
 
     @Column(unique = true, nullable = false)
-    @Size(min = 10, max = 100)
     private String lastName;
 
     @ManyToOne(fetch = FetchType.EAGER, cascade = CascadeType.ALL)
