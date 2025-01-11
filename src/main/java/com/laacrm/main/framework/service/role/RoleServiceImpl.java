@@ -3,6 +3,7 @@ package com.laacrm.main.framework.service.role;
 import com.laacrm.main.framework.entities.Role;
 import com.laacrm.main.framework.exception.FrameworkException;
 import com.laacrm.main.framework.repo.RoleRepo;
+import com.laacrm.main.framework.service.FrameworkConstants;
 import jakarta.transaction.Transactional;
 import lombok.AllArgsConstructor;
 import org.springframework.http.HttpStatus;
@@ -47,6 +48,15 @@ public class RoleServiceImpl implements RoleService {
     @Override
     public void deleteRole(Long roleId) {
 
+    }
+
+    @Override
+    public void populateDefaultRoles() {
+        if(roleRepo.count() == 0) {
+            for(FrameworkConstants.DefaultRole role : FrameworkConstants.DefaultRole.values()){
+                saveRole(new Role(role.getRoleName()));
+            }
+        }
     }
 
     private void createRoleValidation(Role role) {

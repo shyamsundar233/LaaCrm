@@ -16,4 +16,5 @@ public interface RoleService {
 
     void deleteRole(Long roleId);
 
+    void populateDefaultRoles();
 }
