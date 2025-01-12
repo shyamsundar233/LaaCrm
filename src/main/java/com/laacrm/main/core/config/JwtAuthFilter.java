@@ -1,5 +1,7 @@
 package com.laacrm.main.core.config;
 
+import com.laacrm.main.core.AuthThreadLocal;
+import com.laacrm.main.framework.entities.Users;
 import io.jsonwebtoken.ExpiredJwtException;
 import jakarta.servlet.FilterChain;
 import jakarta.servlet.ServletException;
@@ -54,6 +56,8 @@ public class JwtAuthFilter extends OncePerRequestFilter {
 
             if (userEmail != null && authentication == null) {
                 UserDetails userDetails = this.userDetailsService.loadUserByUsername(userEmail);
+                AuthThreadLocal.setCurrentUser((Users) userDetails);
+                AuthThreadLocal.setCurrentTenant(((Users) userDetails).getTenant());
                 if (jwtService.isTokenValid(jwt, userDetails)) {
                     UsernamePasswordAuthenticationToken authToken = new UsernamePasswordAuthenticationToken(
                             userDetails,

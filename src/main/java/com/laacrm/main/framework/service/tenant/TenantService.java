@@ -16,4 +16,6 @@ public interface TenantService {
     Ranges saveRange(Ranges range);
 
     Ranges allocateRangeForTenant(Tenant tenant);
+
+    Long getCurrentAvailablePK();
 }

@@ -1,5 +1,6 @@
 package com.laacrm.main.framework.service.tenant;
 
+import com.laacrm.main.core.AuthThreadLocal;
 import com.laacrm.main.framework.entities.Ranges;
 import com.laacrm.main.framework.entities.Tenant;
 import com.laacrm.main.framework.repo.RangeRepo;
@@ -69,6 +70,25 @@ public class TenantServiceImpl implements TenantService {
         range.setTenant(tenant);
         saveRange(range);
         return null;
+    }
+
+    @Override
+    public Long getCurrentAvailablePK() {
+        Tenant currentTenant = AuthThreadLocal.getCurrentTenant();
+        Ranges currentRange = rangeRepo.findTopByOrderByTenantDesc();
+        Long currentPK = currentTenant.getCurrentUniqueId();
+        if(currentPK + 1 > currentRange.getEndRange()){
+            LOGGER.log(Level.INFO, "Range exhausted for Tenant {0} :: Allocating New Range", currentTenant.getTenantId());
+            Ranges nextRange = getNextAvailableRange();
+            nextRange.setTenant(currentTenant);
+            saveRange(nextRange);
+            LOGGER.log(Level.INFO, "New Range Allocated for Tenant {0}", currentTenant.getTenantId());
+            currentTenant.setCurrentUniqueId(nextRange.getStartRange());
+        }else{
+            currentTenant.setCurrentUniqueId(currentPK + 1);
+        }
+        saveTenant(currentTenant);
+        return currentPK;
     }
 
 }

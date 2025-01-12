@@ -9,4 +9,6 @@ public interface RangeRepo extends JpaRepository<Ranges, Long> {
 
     Optional<Ranges> findFirstByTenantIsNull();
 
+    Ranges findTopByOrderByTenantDesc();
+
 }
