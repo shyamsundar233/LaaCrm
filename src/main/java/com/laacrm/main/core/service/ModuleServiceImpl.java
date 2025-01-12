@@ -17,7 +17,7 @@ public class ModuleServiceImpl implements ServiceWrapper<Module> {
 
     @Override
     public List<Module> findAll() {
-        return List.of();
+        return moduleRepo.findAll();
     }
 
     @Override
