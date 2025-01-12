@@ -37,6 +37,10 @@ public class APIController {
     }
 
     public ResponseEntity<APIResponse> response() {
+        if(apiResponse.code == null || apiResponse.code.isEmpty()) {
+            apiResponse.code = String.valueOf(HttpStatus.OK.value());
+            apiResponse.message = "Response Structure has not been configured";
+        }
         return new ResponseEntity<>(apiResponse, HttpStatus.valueOf(Integer.parseInt(apiResponse.code)));
     }
 
