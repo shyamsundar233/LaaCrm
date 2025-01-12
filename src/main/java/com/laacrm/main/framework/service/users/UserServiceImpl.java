@@ -82,7 +82,7 @@ public class UserServiceImpl implements UserService {
                         usersRepo.findByEmail(loginUserDetails.getEmail()).orElseThrow(() -> new FrameworkException(HttpStatus.UNAUTHORIZED.value(), "User not found, Email is invalid"));
             authenticationManager.authenticate(
                     new UsernamePasswordAuthenticationToken(
-                            loginUserDetails.getEmail(),
+                            loginUser.getEmail(),
                             loginUserDetails.getPassword()
                     )
             );
