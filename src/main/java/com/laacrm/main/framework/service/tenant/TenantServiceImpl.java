@@ -1,6 +1,6 @@
 package com.laacrm.main.framework.service.tenant;
 
-import com.laacrm.main.core.AuthThreadLocal;
+import com.laacrm.main.framework.AuthThreadLocal;
 import com.laacrm.main.framework.entities.Ranges;
 import com.laacrm.main.framework.entities.Tenant;
 import com.laacrm.main.framework.repo.RangeRepo;
@@ -9,6 +9,7 @@ import jakarta.transaction.Transactional;
 import lombok.AllArgsConstructor;
 import org.springframework.stereotype.Service;
 
+import java.util.List;
 import java.util.logging.Level;
 import java.util.logging.Logger;
 
@@ -89,6 +90,17 @@ public class TenantServiceImpl implements TenantService {
         }
         saveTenant(currentTenant);
         return currentPK;
+    }
+
+    @Override
+    public boolean isPKInRange(Long id){
+        List<Ranges> ranges = AuthThreadLocal.getCurrentTenant().getRanges();
+        for(Ranges range : ranges){
+            if(range.getStartRange() >= id && range.getEndRange() <= id){
+                return true;
+            }
+        }
+        return false;
     }
 
 }

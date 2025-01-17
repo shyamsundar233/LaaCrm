@@ -18,4 +18,6 @@ public interface TenantService {
     Ranges allocateRangeForTenant(Tenant tenant);
 
     Long getCurrentAvailablePK();
+
+    boolean isPKInRange(Long id);
 }

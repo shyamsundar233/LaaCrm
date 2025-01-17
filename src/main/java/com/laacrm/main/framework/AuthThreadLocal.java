@@ -1,4 +1,4 @@
-package com.laacrm.main.core;
+package com.laacrm.main.framework;
 
 import com.laacrm.main.framework.entities.Tenant;
 import com.laacrm.main.framework.entities.Users;

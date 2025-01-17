@@ -1,6 +1,6 @@
 package com.laacrm.main.core.config;
 
-import com.laacrm.main.core.AuthThreadLocal;
+import com.laacrm.main.framework.AuthThreadLocal;
 import com.laacrm.main.framework.entities.Users;
 import io.jsonwebtoken.ExpiredJwtException;
 import jakarta.servlet.FilterChain;
