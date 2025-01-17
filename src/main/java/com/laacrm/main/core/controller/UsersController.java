@@ -8,7 +8,6 @@ import com.laacrm.main.framework.service.users.LoginUser;
 import com.laacrm.main.framework.service.users.UserDTO;
 import com.laacrm.main.framework.service.users.UserService;
 import lombok.AllArgsConstructor;
-import org.json.JSONObject;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.PostMapping;
@@ -16,6 +15,8 @@ import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RestController;
 
+import java.util.HashMap;
+import java.util.Map;
 import java.util.logging.Level;
 import java.util.logging.Logger;
 
@@ -47,7 +48,7 @@ public class UsersController extends APIController{
         try{
             Users loginUser = userService.authenticateUser(loginUserDetails);
             String jwtToken = jwtService.generateToken(loginUser);
-            JSONObject details = new JSONObject();
+            Map<String, Object> details = new HashMap<>();
             details.put("token", jwtToken);
             details.put("expiresIn", String.valueOf(jwtService.getExpirationTime()));
             addResponse(HttpStatus.OK.value(), "User Authenticated Successfully", details);

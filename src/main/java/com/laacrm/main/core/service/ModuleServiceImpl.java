@@ -1,7 +1,7 @@
 package com.laacrm.main.core.service;
 
+import com.laacrm.main.core.dao.DaoHelper;
 import com.laacrm.main.core.entity.Module;
-import com.laacrm.main.core.repo.ModuleRepo;
 import jakarta.transaction.Transactional;
 import lombok.AllArgsConstructor;
 import org.springframework.stereotype.Service;
@@ -13,11 +13,11 @@ import java.util.List;
 @AllArgsConstructor
 public class ModuleServiceImpl implements ServiceWrapper<Module> {
 
-    private final ModuleRepo moduleRepo;
+    private final DaoHelper<Module, Long> moduleDaoHelper;
 
     @Override
     public List<Module> findAll() {
-        return moduleRepo.findAll();
+        return moduleDaoHelper.findAll(Module.class);
     }
 
     @Override
@@ -27,7 +27,7 @@ public class ModuleServiceImpl implements ServiceWrapper<Module> {
 
     @Override
     public Module save(Module entity) {
-        return null;
+        return moduleDaoHelper.save(entity);
     }
 
     @Override

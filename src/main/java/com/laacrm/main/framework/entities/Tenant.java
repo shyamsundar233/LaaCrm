@@ -17,7 +17,7 @@ public class Tenant {
 
     private Boolean isActive;
 
-    @OneToMany(mappedBy = "tenant", fetch = FetchType.LAZY, cascade = CascadeType.ALL)
+    @OneToMany(mappedBy = "tenant", fetch = FetchType.EAGER, cascade = CascadeType.ALL)
     private List<Ranges> ranges;
 
 }

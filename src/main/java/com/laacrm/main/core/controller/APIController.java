@@ -2,11 +2,9 @@ package com.laacrm.main.core.controller;
 
 import lombok.Getter;
 import lombok.Setter;
-import org.json.JSONObject;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 
-import java.util.HashMap;
 import java.util.Map;
 
 public class APIController {
@@ -25,15 +23,10 @@ public class APIController {
         addResponse(statusCode, message, null);
     }
 
-    public void addResponse(int statusCode, String message, JSONObject response) {
+    public void addResponse(int statusCode, String message, Map<String, Object> details) {
         apiResponse.code = String.valueOf(statusCode);
         apiResponse.message = message;
-        if(response != null && !response.isEmpty()) {
-            apiResponse.data = new HashMap<>();
-            for(String data : response.keySet()){
-                apiResponse.data.put(data, response.get(data));
-            }
-        }
+        apiResponse.data = details;
     }
 
     public ResponseEntity<APIResponse> response() {
