@@ -33,10 +33,39 @@ public class ModuleController extends APIController {
         return response();
     }
 
+    @GetMapping("/module/{moduleId}")
+    public ResponseEntity<APIResponse> getModuleById(@PathVariable("moduleId") Long moduleId){
+        Module module = moduleService.findById(moduleId);
+        ModuleDTO moduleDetails = module != null ? getModuleDTOFromModuleEntity(module) : null;
+        Map<String, Object> details = new HashMap<>();
+        details.put("module", moduleDetails);
+        addResponse(HttpStatus.OK.value(), "Module fetched successfully", details);
+        return response();
+    }
+
     @PostMapping("/module")
     public ResponseEntity<APIResponse> saveModule(@RequestBody ModuleDTO moduleDetails){
         Module moduleEntity = getModuleEntityFromModuleDTO(moduleDetails);
         moduleService.save(moduleEntity);
+        addResponse(HttpStatus.OK.value(), "Module saved successfully");
+        return response();
+    }
+
+    @PutMapping("/module")
+    public ResponseEntity<APIResponse> updateModule(@RequestBody ModuleDTO moduleDetails){
+        Module moduleEntity = getModuleEntityFromModuleDTO(moduleDetails);
+        if(moduleDetails.getModuleId() != null && !moduleDetails.getModuleId().isEmpty()){
+            moduleEntity.setModuleId(Long.valueOf(moduleDetails.getModuleId()));
+        }
+        moduleService.update(moduleEntity);
+        addResponse(HttpStatus.OK.value(), "Module updated successfully");
+        return response();
+    }
+
+    @DeleteMapping("/module/{moduleId}")
+    public ResponseEntity<APIResponse> deleteModule(@PathVariable("moduleId") Long moduleId){
+        moduleService.delete(moduleId);
+        addResponse(HttpStatus.OK.value(), "Module deleted successfully");
         return response();
     }
 
@@ -45,8 +74,8 @@ public class ModuleController extends APIController {
                 moduleDTO.getModuleName(),
                 moduleDTO.getSingularName(),
                 moduleDTO.getPluralName(),
-                Integer.valueOf(moduleDTO.getType()),
-                Integer.valueOf(moduleDTO.getStatus()));
+                moduleDTO.getType() != null && !moduleDTO.getType().isEmpty() ? Integer.valueOf(moduleDTO.getType()) : null,
+                moduleDTO.getStatus() != null && !moduleDTO.getStatus().isEmpty() ? Integer.valueOf(moduleDTO.getStatus()) : null);
     }
 
     private ModuleDTO getModuleDTOFromModuleEntity(Module module){

@@ -20,6 +20,7 @@ public class APIControllerAdvice {
     public ResponseEntity<APIException.ErrorResponse> handleException(Exception exp) {
         final Logger LOGGER = Logger.getLogger(exp.getClass().getName());
         LOGGER.log(Level.SEVERE, exp.getMessage());
+        exp.printStackTrace();
         APIException.ErrorResponse response = new APIException.ErrorResponse();
         response.setCode(String.valueOf(HttpStatus.INTERNAL_SERVER_ERROR.value()));
         response.setMessage(exp.getMessage());

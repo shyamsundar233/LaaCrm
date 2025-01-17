@@ -1,5 +1,6 @@
 package com.laacrm.main.core.entity;
 
+import com.laacrm.main.core.Constants;
 import jakarta.persistence.Entity;
 import jakarta.persistence.GeneratedValue;
 import jakarta.persistence.Id;
@@ -21,9 +22,9 @@ public class Module {
 
     private String pluralName;
 
-    private Integer type;
+    private Integer type = Constants.ModuleConstants.ModuleType.DEFAULT.getValue();
 
-    private Integer status;
+    private Integer status = Constants.ModuleConstants.ModuleStatus.ACTIVE.getValue();
 
     public Module() {}
 
