@@ -1,11 +1,13 @@
 package com.laacrm.main.core.entity;
 
-import com.laacrm.main.core.Constants;
-import jakarta.persistence.Entity;
-import jakarta.persistence.GeneratedValue;
-import jakarta.persistence.Id;
+import com.fasterxml.jackson.annotation.JsonManagedReference;
+import com.laacrm.main.core.ModuleConstants;
+import jakarta.persistence.*;
 import lombok.Data;
 import org.hibernate.annotations.GenericGenerator;
+
+import java.util.ArrayList;
+import java.util.List;
 
 @Entity
 @Data
@@ -22,27 +24,33 @@ public class Module {
 
     private String pluralName;
 
-    private Integer type = Constants.ModuleConstants.ModuleType.DEFAULT.getValue();
+    private Integer type = ModuleConstants.ModuleType.DEFAULT.getValue();
 
-    private Integer status = Constants.ModuleConstants.ModuleStatus.ACTIVE.getValue();
+    private Integer status = ModuleConstants.ModuleStatus.ACTIVE.getValue();
+
+    @OneToMany(mappedBy = "module", cascade = CascadeType.ALL, orphanRemoval = true)
+    @JsonManagedReference
+    private List<Field> fields = new ArrayList<>();
 
     public Module() {}
 
-    public Module(String moduleName, String singularName, String pluralName, Integer type, Integer status) {
+    public Module(String moduleName, String singularName, String pluralName, Integer type, Integer status, List<Field> fields) {
         this.moduleName = moduleName;
         this.singularName = singularName;
         this.pluralName = pluralName;
         this.type = type;
         this.status = status;
+        this.fields = fields;
     }
 
-    public Module(Long moduleId, String moduleName, String singularName, String pluralName, Integer type, Integer status) {
+    public Module(Long moduleId, String moduleName, String singularName, String pluralName, Integer type, Integer status, List<Field> fields) {
         this.moduleId = moduleId;
         this.moduleName = moduleName;
         this.singularName = singularName;
         this.pluralName = pluralName;
         this.type = type;
         this.status = status;
+        this.fields = fields;
     }
 
 }

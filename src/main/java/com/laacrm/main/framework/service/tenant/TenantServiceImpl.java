@@ -74,6 +74,7 @@ public class TenantServiceImpl implements TenantService {
     }
 
     @Override
+    @Transactional(Transactional.TxType.REQUIRES_NEW)
     public Long getCurrentAvailablePK() {
         Tenant currentTenant = AuthThreadLocal.getCurrentTenant();
         Ranges currentRange = rangeRepo.findTopByOrderByTenantDesc();
@@ -96,7 +97,7 @@ public class TenantServiceImpl implements TenantService {
     public boolean isPKInRange(Long id){
         List<Ranges> ranges = AuthThreadLocal.getCurrentTenant().getRanges();
         for(Ranges range : ranges){
-            if(range.getStartRange() >= id && range.getEndRange() <= id){
+            if(id >= range.getStartRange() && id <= range.getEndRange()){
                 return true;
             }
         }

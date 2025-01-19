@@ -1,10 +1,11 @@
 package com.laacrm.main.core.controller.module;
 
-import lombok.AllArgsConstructor;
 import lombok.Data;
 
+import java.util.ArrayList;
+import java.util.List;
+
 @Data
-@AllArgsConstructor
 public class ModuleDTO {
 
     private String moduleId;
@@ -18,5 +19,19 @@ public class ModuleDTO {
     private String type;
 
     private String status;
+
+    private List<FieldDTO> fields = new ArrayList<>();
+
+    public ModuleDTO() {}
+
+    public ModuleDTO(String moduleId, String moduleName, String singularName, String pluralName, String type, String status, List<FieldDTO> fields) {
+        this.moduleId = moduleId;
+        this.moduleName = moduleName;
+        this.singularName = singularName;
+        this.pluralName = pluralName;
+        this.type = type;
+        this.status = status;
+        this.fields = fields;
+    }
 
 }

@@ -1,6 +1,7 @@
 package com.laacrm.main.core.controller.module;
 
 import com.laacrm.main.core.controller.APIController;
+import com.laacrm.main.core.entity.Field;
 import com.laacrm.main.core.entity.Module;
 import com.laacrm.main.core.service.ServiceWrapper;
 import lombok.AllArgsConstructor;
@@ -70,21 +71,48 @@ public class ModuleController extends APIController {
     }
 
     private Module getModuleEntityFromModuleDTO(ModuleDTO moduleDTO){
+        List<Field> fieldsList = new ArrayList<>();
+        for (FieldDTO fieldDTO : moduleDTO.getFields()) {
+            fieldsList.add(getFieldEntityFromFieldDTO(fieldDTO));
+        }
         return new Module(
                 moduleDTO.getModuleName(),
                 moduleDTO.getSingularName(),
                 moduleDTO.getPluralName(),
                 moduleDTO.getType() != null && !moduleDTO.getType().isEmpty() ? Integer.valueOf(moduleDTO.getType()) : null,
-                moduleDTO.getStatus() != null && !moduleDTO.getStatus().isEmpty() ? Integer.valueOf(moduleDTO.getStatus()) : null);
+                moduleDTO.getStatus() != null && !moduleDTO.getStatus().isEmpty() ? Integer.valueOf(moduleDTO.getStatus()) : null,
+                fieldsList);
     }
 
     private ModuleDTO getModuleDTOFromModuleEntity(Module module){
+        List<FieldDTO> fieldsList = new ArrayList<>();
+        for (Field field : module.getFields()) {
+            fieldsList.add(getFieldDTOFromFieldEntity(field));
+        }
         return new ModuleDTO(
                 String.valueOf(module.getModuleId()),
                 module.getModuleName(),
                 module.getSingularName(),
                 module.getPluralName(),
                 String.valueOf(module.getType()),
-                String.valueOf(module.getStatus()));
+                String.valueOf(module.getStatus()),
+                fieldsList);
+    }
+
+    private Field getFieldEntityFromFieldDTO(FieldDTO fieldDTO){
+        return new Field(
+                fieldDTO.getFieldName(),
+                Integer.valueOf(fieldDTO.getFieldType())
+        );
+    }
+
+    private FieldDTO getFieldDTOFromFieldEntity(Field field){
+        return new FieldDTO(
+                String.valueOf(field.getFieldId()),
+                String.valueOf(field.getModule().getModuleId()),
+                field.getFieldName(),
+                String.valueOf(field.getFieldType()),
+                field.getFieldValue()
+        );
     }
 }

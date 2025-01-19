@@ -48,11 +48,11 @@ public class DaoHelper<T, ID>{
     }
 
     public <S extends T> S save(@NonNull S entity){
-        entityManager.persist(entity);
+        entityManager.merge(entity);
         return entity;
     }
 
-    public <S extends T> S update(S entity) {
+    public <S extends T> S update(@NonNull S entity) {
         Object primaryKeyValue = getPrimaryKeyValue(entity);
         if (primaryKeyValue == null) {
             throw new DaoException("Primary key value is null");
