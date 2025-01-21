@@ -13,16 +13,13 @@ public class FieldDTO {
 
     private String fieldType;
 
-    private String fieldValue;
-
     public FieldDTO() {}
 
-    public FieldDTO(String fieldId, String moduleId, String fieldName, String fieldType, String fieldValue) {
+    public FieldDTO(String fieldId, String moduleId, String fieldName, String fieldType) {
         this.fieldId = fieldId;
         this.moduleId = moduleId;
         this.fieldName = fieldName;
         this.fieldType = fieldType;
-        this.fieldValue = fieldValue;
     }
 
 }

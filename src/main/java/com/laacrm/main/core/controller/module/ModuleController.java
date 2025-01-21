@@ -111,8 +111,7 @@ public class ModuleController extends APIController {
                 String.valueOf(field.getFieldId()),
                 String.valueOf(field.getModule().getModuleId()),
                 field.getFieldName(),
-                String.valueOf(field.getFieldType()),
-                field.getFieldValue()
+                String.valueOf(field.getFieldType())
         );
     }
 }

@@ -25,8 +25,6 @@ public class Field {
 
     private Integer fieldType;
 
-    private String fieldValue;
-
     public Field() {}
 
     public Field(String fieldName, Integer fieldType) {

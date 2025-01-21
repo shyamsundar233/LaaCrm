@@ -10,8 +10,11 @@ public class FieldConstants {
     @Getter
     @AllArgsConstructor
     public enum FieldType{
-        SYSTEM_FIELD("systemField", 1),
-        USER_FIELD("userField", 2);
+        SINGLE_LINE("single_line", 1),
+        MULTI_LINE("multi_line", 2),
+        NUMBER("number", 3),
+        DROPDOWN("dropdown", 4),
+        CHECKBOX("checkbox", 5);
 
         private final String name;
         private final Integer value;
