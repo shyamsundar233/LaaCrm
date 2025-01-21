@@ -18,6 +18,7 @@ import java.lang.reflect.Field;
 import java.util.ArrayList;
 import java.util.List;
 import java.util.Optional;
+import java.util.function.Consumer;
 
 @Repository
 @Transactional
@@ -46,6 +47,47 @@ public class DaoHelper<T, ID>{
         T result = entityManager.createQuery(query).getResultList().stream().findFirst().orElse(null);
         return Optional.ofNullable(result);
     }
+
+    /**
+     * For Ref
+     *
+     * List<MyEntity> results = daoHelper.findByUserCriteria(MyEntity.class, context -> {
+     *     CriteriaBuilder cb = context.getCriteriaBuilder();
+     *     Root<MyEntity> root = context.getRoot();
+     *
+     *     // Add an equals predicate
+     *     context.addPredicate(cb.equal(root.get("firstName"), "John"));
+     *
+     *     // Add a not-equals predicate
+     *     context.addPredicate(cb.notEqual(root.get("status"), "INACTIVE"));
+     *
+     *     // Add a range predicate
+     *     context.addPredicate(cb.between(root.get("age"), 25, 40));
+     *
+     *     // Add an IN predicate
+     *     context.addPredicate(root.get("role").in(Arrays.asList("ADMIN", "USER")));
+     * });
+     * @param entityClass
+     * @param criteriaBuilderConsumer
+     * @return
+     */
+    public List<T> findByUserCriteria(Class<T> entityClass, Consumer<CriteriaBuilderContext<T>> criteriaBuilderConsumer) {
+        CriteriaBuilder cb = entityManager.getCriteriaBuilder();
+        CriteriaQuery<T> query = cb.createQuery(entityClass);
+        Root<T> root = query.from(entityClass);
+
+        CriteriaBuilderContext<T> context = new CriteriaBuilderContext<>(cb, root);
+
+        criteriaBuilderConsumer.accept(context);
+
+        List<Predicate> predicates = new ArrayList<>(context.getPredicates());
+        predicates.add(cb.or(getAllPKPredicates(entityClass, cb, root)));
+
+        query.select(root).where(cb.and(predicates.toArray(new Predicate[0])));
+
+        return entityManager.createQuery(query).getResultList();
+    }
+
 
     public <S extends T> S save(@NonNull S entity){
         entityManager.merge(entity);
