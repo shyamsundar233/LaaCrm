@@ -2,6 +2,8 @@ package com.laacrm.main.core.controller.module;
 
 import lombok.Data;
 
+import java.util.List;
+
 @Data
 public class FieldDTO {
 
@@ -13,13 +15,16 @@ public class FieldDTO {
 
     private String fieldType;
 
+    private List<FieldPropertyDTO> fieldProperties;
+
     public FieldDTO() {}
 
-    public FieldDTO(String fieldId, String moduleId, String fieldName, String fieldType) {
+    public FieldDTO(String fieldId, String moduleId, String fieldName, String fieldType, List<FieldPropertyDTO> fieldProperties) {
         this.fieldId = fieldId;
         this.moduleId = moduleId;
         this.fieldName = fieldName;
         this.fieldType = fieldType;
+        this.fieldProperties = fieldProperties;
     }
 
 }

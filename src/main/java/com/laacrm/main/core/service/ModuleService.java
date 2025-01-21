@@ -5,6 +5,8 @@ import com.laacrm.main.core.ModuleConstants;
 import com.laacrm.main.core.controller.APIException;
 import com.laacrm.main.core.dao.DaoHelper;
 import com.laacrm.main.core.entity.Field;
+import com.laacrm.main.core.entity.FieldProperties;
+import com.laacrm.main.core.entity.FieldPropertiesRef;
 import com.laacrm.main.core.entity.Module;
 import jakarta.transaction.Transactional;
 import lombok.AllArgsConstructor;
@@ -26,6 +28,7 @@ public class ModuleService implements ServiceWrapper<Module> {
     private static final Logger LOGGER = Logger.getLogger(ModuleService.class.getName());
 
     private final DaoHelper<Module, Long> moduleDaoHelper;
+    private final DaoHelper<FieldPropertiesRef, Long> propRefDaoHelper;
     private final ModuleValidator moduleValidator = new ModuleValidator();
     private final FieldValidator fieldValidator = new FieldValidator();
 
@@ -72,6 +75,12 @@ public class ModuleService implements ServiceWrapper<Module> {
         updateFieldsInExistingModule(existingModule, module);
         fieldValidator.validateSave(existingModule.getFields());
         return moduleDaoHelper.update(existingModule);
+    }
+
+    private void updateFieldRefData(List<FieldProperties> properties){
+        for(FieldProperties property : properties){
+            property.setProperty(null);
+        }
     }
 
     private void updateFieldsInExistingModule(Module existingModule, Module module) {

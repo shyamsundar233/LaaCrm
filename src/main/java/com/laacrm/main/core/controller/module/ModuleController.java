@@ -2,6 +2,8 @@ package com.laacrm.main.core.controller.module;
 
 import com.laacrm.main.core.controller.APIController;
 import com.laacrm.main.core.entity.Field;
+import com.laacrm.main.core.entity.FieldProperties;
+import com.laacrm.main.core.entity.FieldPropertiesRef;
 import com.laacrm.main.core.entity.Module;
 import com.laacrm.main.core.service.ServiceWrapper;
 import lombok.AllArgsConstructor;
@@ -100,18 +102,40 @@ public class ModuleController extends APIController {
     }
 
     private Field getFieldEntityFromFieldDTO(FieldDTO fieldDTO){
-        return new Field(
+        List<FieldProperties> fieldProperties = new ArrayList<>();
+        Field field = new Field(
                 fieldDTO.getFieldName(),
-                Integer.valueOf(fieldDTO.getFieldType())
-        );
+                Integer.valueOf(fieldDTO.getFieldType()),
+                fieldProperties);
+        for(FieldPropertyDTO fieldPropertyDTO : fieldDTO.getFieldProperties()){
+            FieldProperties properties = new FieldProperties();
+            FieldPropertiesRef propRef = new FieldPropertiesRef();
+            propRef.setPropertyName(fieldPropertyDTO.getPropertyName());
+            properties.setPropertyValue(fieldPropertyDTO.getPropertyValue());
+            properties.setProperty(propRef);
+            properties.setField(field);
+            fieldProperties.add(properties);
+        }
+        return field;
     }
 
     private FieldDTO getFieldDTOFromFieldEntity(Field field){
+        List<FieldPropertyDTO> fieldPropertiesList = new ArrayList<>();
+        for(FieldProperties fieldProperties : field.getFieldProperties()){
+            FieldPropertyDTO fieldPropertyDTO = new FieldPropertyDTO(
+                    String.valueOf(fieldProperties.getPropertyId()),
+                    String.valueOf(fieldProperties.getField().getFieldId()),
+                    fieldProperties.getProperty().getPropertyName(),
+                    fieldProperties.getPropertyValue()
+            );
+            fieldPropertiesList.add(fieldPropertyDTO);
+        }
         return new FieldDTO(
                 String.valueOf(field.getFieldId()),
                 String.valueOf(field.getModule().getModuleId()),
                 field.getFieldName(),
-                String.valueOf(field.getFieldType())
+                String.valueOf(field.getFieldType()),
+                fieldPropertiesList
         );
     }
 }

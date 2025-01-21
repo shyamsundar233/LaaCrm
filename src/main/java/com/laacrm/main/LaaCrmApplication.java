@@ -1,6 +1,6 @@
 package com.laacrm.main;
 
-import com.laacrm.main.core.service.InitialCoreDataPopulate;
+import com.laacrm.main.core.service.TemplateDataPopulate;
 import com.laacrm.main.framework.service.initPopulate.InitialPopulationService;
 import jakarta.annotation.PostConstruct;
 import lombok.AllArgsConstructor;
@@ -12,12 +12,12 @@ import org.springframework.boot.autoconfigure.SpringBootApplication;
 public class LaaCrmApplication {
 
 	private final InitialPopulationService initPopulationService;
-	private final InitialCoreDataPopulate initialCoreDataPopulate;
+	private final TemplateDataPopulate templateDataPopulate;
 
 	@PostConstruct
 	public void init() throws Exception {
 		initPopulationService.initPopulate();
-		initialCoreDataPopulate.populate();
+		templateDataPopulate.populate();
 	}
 
 	public static void main(String[] args) {

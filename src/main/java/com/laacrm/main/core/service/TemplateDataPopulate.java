@@ -20,14 +20,14 @@ import java.util.List;
 
 @Service
 @Transactional
-public class InitialCoreDataPopulate {
+public class TemplateDataPopulate {
 
     private final DaoHelper<FieldPropertiesRef, Long> fieldPropRefDao;
     private final ModuleService moduleService;
     private final Document dataXmlDocument;
 
     @Autowired
-    public InitialCoreDataPopulate(DaoHelper<FieldPropertiesRef, Long> fieldPropRefDao, ModuleService moduleService) throws Exception{
+    public TemplateDataPopulate(DaoHelper<FieldPropertiesRef, Long> fieldPropRefDao, ModuleService moduleService) throws Exception{
         this.fieldPropRefDao = fieldPropRefDao;
         this.moduleService = moduleService;
         DocumentBuilderFactory factory = DocumentBuilderFactory.newInstance();
@@ -67,7 +67,7 @@ public class InitialCoreDataPopulate {
                             if(fldModName.equals(moduleName)){
                                 String fieldName = fieldElement.getAttribute("field-name");
                                 Integer fldType = Integer.valueOf(fieldElement.getAttribute("field-type"));
-                                Field field = new Field(fieldName, fldType);
+                                Field field = new Field(fieldName, fldType, null);
                                 field.setModule(module);
                                 fields.add(field);
                             }
