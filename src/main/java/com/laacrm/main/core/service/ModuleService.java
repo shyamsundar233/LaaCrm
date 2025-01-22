@@ -8,6 +8,7 @@ import com.laacrm.main.core.entity.Field;
 import com.laacrm.main.core.entity.FieldProperties;
 import com.laacrm.main.core.entity.FieldPropertiesRef;
 import com.laacrm.main.core.entity.Module;
+import com.laacrm.main.core.repo.FieldPropertiesRefRepo;
 import jakarta.transaction.Transactional;
 import lombok.AllArgsConstructor;
 import org.springframework.http.HttpStatus;
@@ -28,7 +29,7 @@ public class ModuleService implements ServiceWrapper<Module> {
     private static final Logger LOGGER = Logger.getLogger(ModuleService.class.getName());
 
     private final DaoHelper<Module, Long> moduleDaoHelper;
-    private final DaoHelper<FieldPropertiesRef, Long> propRefDaoHelper;
+    private final FieldPropertiesRefRepo propRefRepo;
     private final ModuleValidator moduleValidator = new ModuleValidator();
     private final FieldValidator fieldValidator = new FieldValidator();
 
@@ -50,6 +51,7 @@ public class ModuleService implements ServiceWrapper<Module> {
             field.setModule(module);
         }
         fieldValidator.validateSave(module.getFields());
+        updateFieldRefData(module.getFields());
         return moduleDaoHelper.save(module);
     }
 
@@ -77,9 +79,15 @@ public class ModuleService implements ServiceWrapper<Module> {
         return moduleDaoHelper.update(existingModule);
     }
 
-    private void updateFieldRefData(List<FieldProperties> properties){
-        for(FieldProperties property : properties){
-            property.setProperty(null);
+    private void updateFieldRefData(List<Field> fields){
+        for(Field field : fields){
+            for(FieldProperties property : field.getFieldProperties()){
+                FieldPropertiesRef fieldPropertiesRef = propRefRepo.findByPropertyName(property.getProperty().getPropertyName()).orElse(null);
+                if(fieldPropertiesRef == null){
+                    throw new APIException(HttpStatus.BAD_REQUEST.value(), "Field properties not found");
+                }
+                property.setProperty(fieldPropertiesRef);
+            }
         }
     }
 
