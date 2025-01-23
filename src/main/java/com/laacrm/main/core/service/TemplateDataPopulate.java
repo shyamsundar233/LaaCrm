@@ -1,11 +1,10 @@
 package com.laacrm.main.core.service;
 
-import com.laacrm.main.core.dao.DaoHelper;
 import com.laacrm.main.core.entity.Field;
 import com.laacrm.main.core.entity.FieldPropertiesRef;
 import com.laacrm.main.core.entity.Module;
 import jakarta.transaction.Transactional;
-import org.springframework.beans.factory.annotation.Autowired;
+import lombok.AllArgsConstructor;
 import org.springframework.stereotype.Service;
 import org.w3c.dom.Document;
 import org.w3c.dom.Element;
@@ -20,29 +19,24 @@ import java.util.List;
 
 @Service
 @Transactional
+@AllArgsConstructor
 public class TemplateDataPopulate {
 
-    private final DaoHelper<FieldPropertiesRef, Long> fieldPropRefDao;
     private final ModuleService moduleService;
-    private final Document dataXmlDocument;
+    private final FieldService fieldService;
 
-    @Autowired
-    public TemplateDataPopulate(DaoHelper<FieldPropertiesRef, Long> fieldPropRefDao, ModuleService moduleService) throws Exception{
-        this.fieldPropRefDao = fieldPropRefDao;
-        this.moduleService = moduleService;
+    public Document getXmlDocument() throws Exception {
         DocumentBuilderFactory factory = DocumentBuilderFactory.newInstance();
         DocumentBuilder builder = factory.newDocumentBuilder();
-        File initialCoreDataXml = new File("src/main/java/com/laacrm/main/core/xml/PopulateInitialData.xml");
-        dataXmlDocument = builder.parse(initialCoreDataXml);
+        File initialCoreDataXml = new File("src/main/java/com/laacrm/main/core/xml/TemplateData.xml");
+        Document dataXmlDocument = builder.parse(initialCoreDataXml);
         dataXmlDocument.getDocumentElement().normalize();
+        return dataXmlDocument;
     }
 
-    public void populate() throws Exception {
-        populateFieldPropertiesRef();
-    }
-
-    public void populateDefaultModules() {
+    public void populateDefaultModules() throws Exception {
         try{
+            Document dataXmlDocument = getXmlDocument();
             NodeList defaultModulesList = dataXmlDocument.getElementsByTagName("Module");
             NodeList defaultFields = dataXmlDocument.getElementsByTagName("Field");
 
@@ -78,36 +72,38 @@ public class TemplateDataPopulate {
                 }
             }
         } catch (Exception e) {
-            e.printStackTrace();
+            throw new Exception(e);
         }
     }
 
-    private void populateFieldPropertiesRef(){
+    public void populateFieldPropertiesRef() throws Exception {
         try {
+            if(!fieldService.isFieldPropertiesRefPopulated()){
+                Document dataXmlDocument = getXmlDocument();
+                NodeList fieldPropsList = dataXmlDocument.getElementsByTagName("DefaultFieldProp");
 
-            NodeList fieldPropsList = dataXmlDocument.getElementsByTagName("DefaultFieldProp");
+                for (int i = 0; i < fieldPropsList.getLength(); i++) {
+                    Node fieldNode = fieldPropsList.item(i);
 
-            for (int i = 0; i < fieldPropsList.getLength(); i++) {
-                Node fieldNode = fieldPropsList.item(i);
+                    if (fieldNode.getNodeType() == Node.ELEMENT_NODE) {
+                        Element fieldElement = (Element) fieldNode;
 
-                if (fieldNode.getNodeType() == Node.ELEMENT_NODE) {
-                    Element fieldElement = (Element) fieldNode;
+                        String propertyName = fieldElement.getAttribute("property-name");
+                        String displayName = fieldElement.getAttribute("display-name");
+                        Integer fieldType = Integer.valueOf(fieldElement.getAttribute("field-type"));
+                        Boolean mandatory = Boolean.valueOf(fieldElement.getAttribute("mandatory"));
 
-                    String propertyName = fieldElement.getAttribute("property-name");
-                    String displayName = fieldElement.getAttribute("display-name");
-                    Integer fieldType = Integer.valueOf(fieldElement.getAttribute("field-type"));
-                    Boolean mandatory = Boolean.valueOf(fieldElement.getAttribute("mandatory"));
-
-                    FieldPropertiesRef fieldPropertiesRef = new FieldPropertiesRef();
-                    fieldPropertiesRef.setPropertyName(propertyName);
-                    fieldPropertiesRef.setDisplayName(displayName);
-                    fieldPropertiesRef.setFieldType(fieldType);
-                    fieldPropertiesRef.setMandatory(mandatory);
-                    fieldPropRefDao.save(fieldPropertiesRef);
+                        FieldPropertiesRef fieldPropertiesRef = new FieldPropertiesRef();
+                        fieldPropertiesRef.setPropertyName(propertyName);
+                        fieldPropertiesRef.setDisplayName(displayName);
+                        fieldPropertiesRef.setFieldType(fieldType);
+                        fieldPropertiesRef.setMandatory(mandatory);
+                        fieldService.saveFieldPropertiesRef(fieldPropertiesRef);
+                    }
                 }
             }
         } catch (Exception e) {
-            e.printStackTrace();
+            throw new Exception(e);
         }
     }
 

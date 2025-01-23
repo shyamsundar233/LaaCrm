@@ -15,16 +15,4 @@
         <Field module="Products" field-name="Product Name" field-type="1"/>
         <Field module="Sales" field-name="Sale Name" field-type="1"/>
     </SystemFields>
-    <DefaultFieldProps>
-        <DefaultFieldProp property-name="isMandatory" display-name="Is Mandatory" field-type="1" mandatory="false"/>
-        <DefaultFieldProp property-name="maxChar" display-name="Maximum Characters Allowed" field-type="1" mandatory="false"/>
-        <DefaultFieldProp property-name="isMandatory" display-name="Is Mandatory" field-type="2" mandatory="false"/>
-        <DefaultFieldProp property-name="maxChar" display-name="Maximum Characters Allowed" field-type="2" mandatory="false"/>
-        <DefaultFieldProp property-name="isMandatory" display-name="Is Mandatory" field-type="3" mandatory="false"/>
-        <DefaultFieldProp property-name="maxChar" display-name="Maximum Characters Allowed" field-type="3" mandatory="false"/>
-        <DefaultFieldProp property-name="isMandatory" display-name="Is Mandatory" field-type="4" mandatory="false"/>
-        <DefaultFieldProp property-name="defValue" display-name="Default Value" field-type="4" mandatory="false"/>
-        <DefaultFieldProp property-name="isMandatory" display-name="Is Mandatory" field-type="5" mandatory="false"/>
-        <DefaultFieldProp property-name="defValue" display-name="Default Value" field-type="5" mandatory="false"/>
-    </DefaultFieldProps>
 </InitialCoreData>

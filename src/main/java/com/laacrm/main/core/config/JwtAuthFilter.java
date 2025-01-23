@@ -1,5 +1,6 @@
 package com.laacrm.main.core.config;
 
+import com.laacrm.main.core.migration.MigratorService;
 import com.laacrm.main.framework.AuthThreadLocal;
 import com.laacrm.main.framework.entities.Users;
 import io.jsonwebtoken.ExpiredJwtException;
@@ -22,6 +23,8 @@ import org.springframework.stereotype.Component;
 import org.springframework.web.filter.OncePerRequestFilter;
 
 import java.io.IOException;
+import java.util.concurrent.ExecutorService;
+import java.util.concurrent.Executors;
 
 @Component
 @AllArgsConstructor
@@ -30,6 +33,8 @@ public class JwtAuthFilter extends OncePerRequestFilter {
     private final JwtService jwtService;
 
     private final UserDetailsService userDetailsService;
+
+    private final MigratorService migratorService;
 
     /**
      * JWT Authentication Filter
@@ -67,6 +72,15 @@ public class JwtAuthFilter extends OncePerRequestFilter {
 
                     authToken.setDetails(new WebAuthenticationDetailsSource().buildDetails(request));
                     SecurityContextHolder.getContext().setAuthentication(authToken);
+                    if(!migratorService.isTaskScheduled("autoDataPopulate")){
+                        ExecutorService executor = Executors.newSingleThreadExecutor();
+                        executor.submit(() -> {
+                            AuthThreadLocal.setCurrentTenant(((Users) userDetails).getTenant());
+                            AuthThreadLocal.setCurrentTenant(((Users) userDetails).getTenant());
+                            migratorService.migrate();
+                        });
+                        executor.shutdown();
+                    }
                 }
             }
 
