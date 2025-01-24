@@ -29,4 +29,11 @@ public class FieldProperties {
 
     private String propertyValue;
 
+    public FieldProperties() {}
+
+    public FieldProperties(Field field, FieldPropertiesRef property, String propertyValue) {
+        this.field = field;
+        this.property = property;
+        this.propertyValue = propertyValue;
+    }
 }

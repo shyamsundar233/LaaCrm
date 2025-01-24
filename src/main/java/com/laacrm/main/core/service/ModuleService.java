@@ -8,7 +8,6 @@ import com.laacrm.main.core.entity.Field;
 import com.laacrm.main.core.entity.FieldProperties;
 import com.laacrm.main.core.entity.FieldPropertiesRef;
 import com.laacrm.main.core.entity.Module;
-import com.laacrm.main.core.repo.FieldPropertiesRefRepo;
 import jakarta.transaction.Transactional;
 import lombok.AllArgsConstructor;
 import org.springframework.http.HttpStatus;
@@ -29,9 +28,9 @@ public class ModuleService implements ServiceWrapper<Module> {
     private static final Logger LOGGER = Logger.getLogger(ModuleService.class.getName());
 
     private final DaoHelper<Module, Long> moduleDaoHelper;
-    private final FieldPropertiesRefRepo propRefRepo;
     private final ModuleValidator moduleValidator = new ModuleValidator();
     private final FieldValidator fieldValidator = new FieldValidator();
+    private final FieldService fieldService;
 
     @Override
     public List<Module> findAll() {
@@ -82,7 +81,7 @@ public class ModuleService implements ServiceWrapper<Module> {
     private void updateFieldRefData(List<Field> fields){
         for(Field field : fields){
             for(FieldProperties property : field.getFieldProperties()){
-                FieldPropertiesRef fieldPropertiesRef = propRefRepo.findByPropertyName(property.getProperty().getPropertyName()).orElse(null);
+                FieldPropertiesRef fieldPropertiesRef = fieldService.getFieldPropertiesRefByPropertyName(property.getProperty().getPropertyName());
                 if(fieldPropertiesRef == null){
                     throw new APIException(HttpStatus.BAD_REQUEST.value(), "Field properties not found");
                 }

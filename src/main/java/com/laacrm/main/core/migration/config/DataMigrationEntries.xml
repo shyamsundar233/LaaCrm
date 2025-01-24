@@ -1,0 +1,3 @@
+<MigrationEntries>
+    <MigrationEntry class-name="com.laacrm.main.core.migration.initialDataPopulate.InitialDataPopulateMigration"/>
+</MigrationEntries>

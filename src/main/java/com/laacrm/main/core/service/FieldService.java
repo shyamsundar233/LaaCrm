@@ -48,4 +48,8 @@ public class FieldService implements ServiceWrapper<Field> {
     public boolean isFieldPropertiesRefPopulated() {
         return fieldPropertiesRefRepo.count() > 0;
     }
+
+    public FieldPropertiesRef getFieldPropertiesRefByPropertyName(String propertyName) {
+        return fieldPropertiesRefRepo.findByPropertyName(propertyName).orElse(null);
+    }
 }

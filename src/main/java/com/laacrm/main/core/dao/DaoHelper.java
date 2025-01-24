@@ -71,7 +71,7 @@ public class DaoHelper<T, ID>{
      * @param criteriaBuilderConsumer
      * @return
      */
-    public List<T> findByUserCriteria(Class<T> entityClass, Consumer<CriteriaBuilderContext<T>> criteriaBuilderConsumer) {
+    public List<T> findByCriteria(Class<T> entityClass, Consumer<CriteriaBuilderContext<T>> criteriaBuilderConsumer) {
         CriteriaBuilder cb = entityManager.getCriteriaBuilder();
         CriteriaQuery<T> query = cb.createQuery(entityClass);
         Root<T> root = query.from(entityClass);

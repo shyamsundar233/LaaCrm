@@ -13,7 +13,7 @@ import java.time.LocalDateTime;
 
 @Entity
 @Data
-public class MigrationEntries {
+public class MigrationEntry {
 
     @Id
     @GeneratedValue(generator = "id-generator")
@@ -33,5 +33,16 @@ public class MigrationEntries {
     @UpdateTimestamp
     private LocalDateTime endTime;
 
+    public MigrationEntry() {}
 
+    public MigrationEntry(String migrationName, Integer migrationStatus, Integer failureCount) {
+        this.migrationName = migrationName;
+        this.migrationStatus = migrationStatus;
+        this.failureCount = failureCount;
+    }
+
+    public MigrationEntry(String migrationName, Integer migrationStatus) {
+        this.migrationName = migrationName;
+        this.migrationStatus = migrationStatus;
+    }
 }

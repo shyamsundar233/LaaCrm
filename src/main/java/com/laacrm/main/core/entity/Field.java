@@ -7,6 +7,7 @@ import lombok.Data;
 import lombok.ToString;
 import org.hibernate.annotations.GenericGenerator;
 
+import java.util.ArrayList;
 import java.util.List;
 
 @Entity
@@ -30,7 +31,7 @@ public class Field {
 
     @OneToMany(mappedBy = "field")
     @JsonManagedReference
-    private List<FieldProperties> fieldProperties;
+    private List<FieldProperties> fieldProperties = new ArrayList<>();
 
     public Field() {}
 
