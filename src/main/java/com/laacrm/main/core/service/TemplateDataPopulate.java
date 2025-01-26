@@ -17,8 +17,7 @@ import java.io.File;
 @Transactional
 @AllArgsConstructor
 public class TemplateDataPopulate {
-
-    private final ModuleService moduleService;
+    
     private final FieldService fieldService;
 
     public Document getXmlDocument() throws Exception {
