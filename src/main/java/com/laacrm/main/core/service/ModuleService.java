@@ -33,7 +33,7 @@ public class ModuleService implements ServiceWrapper<Module> {
     private final FieldService fieldService;
 
     @Override
-    public List<Module> findAll() {
+    public List<Module> findAll(Object... param) {
         return moduleDaoHelper.findAll(Module.class);
     }
 

@@ -101,7 +101,7 @@ public class ModuleController extends APIController {
                 fieldsList);
     }
 
-    private Field getFieldEntityFromFieldDTO(FieldDTO fieldDTO){
+    public static Field getFieldEntityFromFieldDTO(FieldDTO fieldDTO){
         List<FieldProperties> fieldProperties = new ArrayList<>();
         Field field = new Field(
                 fieldDTO.getFieldName(),
@@ -119,7 +119,7 @@ public class ModuleController extends APIController {
         return field;
     }
 
-    private FieldDTO getFieldDTOFromFieldEntity(Field field){
+    public static FieldDTO getFieldDTOFromFieldEntity(Field field){
         List<FieldPropertyDTO> fieldPropertiesList = new ArrayList<>();
         for(FieldProperties fieldProperties : field.getFieldProperties()){
             FieldPropertyDTO fieldPropertyDTO = new FieldPropertyDTO(

@@ -4,7 +4,7 @@ import java.util.List;
 
 public interface ServiceWrapper<T> {
 
-    List<T> findAll();
+    List<T> findAll(Object... param);
 
     T findById(Long id);
 
