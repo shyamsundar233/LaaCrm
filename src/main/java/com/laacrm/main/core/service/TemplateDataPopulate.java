@@ -12,11 +12,15 @@ import org.w3c.dom.NodeList;
 import javax.xml.parsers.DocumentBuilder;
 import javax.xml.parsers.DocumentBuilderFactory;
 import java.io.File;
+import java.util.logging.Level;
+import java.util.logging.Logger;
 
 @Service
 @Transactional
 @AllArgsConstructor
 public class TemplateDataPopulate {
+
+    private static final Logger LOGGER = Logger.getLogger(TemplateDataPopulate.class.getName());
     
     private final FieldService fieldService;
 
@@ -31,6 +35,7 @@ public class TemplateDataPopulate {
 
     public void populateFieldPropertiesRef() throws Exception {
         try {
+            LOGGER.log(Level.INFO, "Populating FieldPropertiesRef....");
             if(!fieldService.isFieldPropertiesRefPopulated()){
                 Document dataXmlDocument = getXmlDocument();
                 NodeList fieldPropsList = dataXmlDocument.getElementsByTagName("DefaultFieldProp");
@@ -56,6 +61,7 @@ public class TemplateDataPopulate {
                 }
             }
         } catch (Exception e) {
+            LOGGER.log(Level.SEVERE, "Exception occurred while populating Field Properties Ref", e);
             throw new Exception(e);
         }
     }
