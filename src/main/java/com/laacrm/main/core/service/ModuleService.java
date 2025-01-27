@@ -81,7 +81,7 @@ public class ModuleService implements ServiceWrapper<Module> {
     private void updateFieldRefData(List<Field> fields){
         for(Field field : fields){
             for(FieldProperties property : field.getFieldProperties()){
-                FieldPropertiesRef fieldPropertiesRef = fieldService.getFieldPropertiesRefByPropertyName(property.getProperty().getPropertyName());
+                FieldPropertiesRef fieldPropertiesRef = fieldService.getFieldPropertiesRefByPropertyName(property.getProperty().getPropertyName(), field.getFieldType());
                 if(fieldPropertiesRef == null){
                     throw new APIException(HttpStatus.BAD_REQUEST.value(), "Field properties not found");
                 }

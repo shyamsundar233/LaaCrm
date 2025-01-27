@@ -29,7 +29,7 @@ public class Field {
 
     private Integer fieldType;
 
-    @OneToMany(mappedBy = "field")
+    @OneToMany(mappedBy = "field", cascade = CascadeType.ALL, orphanRemoval = true)
     @JsonManagedReference
     private List<FieldProperties> fieldProperties = new ArrayList<>();
 

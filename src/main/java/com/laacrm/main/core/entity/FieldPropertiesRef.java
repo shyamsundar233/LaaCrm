@@ -22,4 +22,9 @@ public class FieldPropertiesRef {
 
     private Boolean mandatory;
 
+    public FieldPropertiesRef() {}
+
+    public FieldPropertiesRef(String propertyName) {
+        this.propertyName = propertyName;
+    }
 }

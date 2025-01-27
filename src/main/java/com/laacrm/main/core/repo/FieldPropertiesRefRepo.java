@@ -7,6 +7,6 @@ import java.util.Optional;
 
 public interface FieldPropertiesRefRepo extends JpaRepository<FieldPropertiesRef, Long> {
 
-    Optional<FieldPropertiesRef> findByPropertyName(String propertyName);
+    Optional<FieldPropertiesRef> findByPropertyNameAndFieldType(String propertyName, Integer fieldType);
 
 }

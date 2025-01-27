@@ -49,7 +49,7 @@ public class FieldService implements ServiceWrapper<Field> {
         return fieldPropertiesRefRepo.count() > 0;
     }
 
-    public FieldPropertiesRef getFieldPropertiesRefByPropertyName(String propertyName) {
-        return fieldPropertiesRefRepo.findByPropertyName(propertyName).orElse(null);
+    public FieldPropertiesRef getFieldPropertiesRefByPropertyName(String propertyName, Integer fieldType) {
+        return fieldPropertiesRefRepo.findByPropertyNameAndFieldType(propertyName, fieldType).orElse(null);
     }
 }
