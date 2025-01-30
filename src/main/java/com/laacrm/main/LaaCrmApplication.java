@@ -18,6 +18,7 @@ public class LaaCrmApplication {
 	public void init() throws Exception {
 		initPopulationService.initPopulate();
 		templateDataPopulate.populateFieldPropertiesRef();
+		templateDataPopulate.populateRecordsTable();
 	}
 
 	public static void main(String[] args) {

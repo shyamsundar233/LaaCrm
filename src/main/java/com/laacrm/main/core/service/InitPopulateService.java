@@ -2,7 +2,7 @@ package com.laacrm.main.core.service;
 
 import com.laacrm.main.core.entity.*;
 import com.laacrm.main.core.entity.Module;
-import com.laacrm.main.core.repo.FieldPropertiesRefRepo;
+import com.laacrm.main.core.xml.XmlUtils;
 import com.laacrm.main.framework.AuthThreadLocal;
 import jakarta.transaction.Transactional;
 import lombok.AllArgsConstructor;
@@ -11,9 +11,6 @@ import org.w3c.dom.Document;
 import org.w3c.dom.Element;
 import org.w3c.dom.NodeList;
 
-import javax.xml.parsers.DocumentBuilder;
-import javax.xml.parsers.DocumentBuilderFactory;
-import java.io.File;
 import java.util.ArrayList;
 import java.util.List;
 import java.util.logging.Level;
@@ -33,22 +30,9 @@ public class InitPopulateService {
         populateDefaultModules();
     }
 
-    private Document loadXmlDocument(String filePath) {
-        try{
-            DocumentBuilderFactory factory = DocumentBuilderFactory.newInstance();
-            DocumentBuilder builder = factory.newDocumentBuilder();
-            File initialCoreDataXml = new File(filePath);
-            Document xmlDoc = builder.parse(initialCoreDataXml);
-            xmlDoc.getDocumentElement().normalize();
-            return xmlDoc;
-        } catch (Exception e) {
-            throw new RuntimeException(e);
-        }
-    }
-
     private void populateDefaultModules() {
         try{
-            Document xmlDoc = loadXmlDocument("src/main/java/com/laacrm/main/core/xml/PopulateInitialData.xml");
+            Document xmlDoc = XmlUtils.loadXmlDocument("src/main/java/com/laacrm/main/core/xml/PopulateInitialData.xml");
             NodeList defaultModules = xmlDoc.getElementsByTagName("Module");
             for (int modIndex = 0; modIndex < defaultModules.getLength(); modIndex++) {
                 Element modElement = (Element) defaultModules.item(modIndex);

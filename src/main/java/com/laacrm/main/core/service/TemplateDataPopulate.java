@@ -1,6 +1,7 @@
 package com.laacrm.main.core.service;
 
 import com.laacrm.main.core.entity.FieldPropertiesRef;
+import com.laacrm.main.core.xml.XmlUtils;
 import jakarta.transaction.Transactional;
 import lombok.AllArgsConstructor;
 import org.springframework.stereotype.Service;
@@ -9,9 +10,6 @@ import org.w3c.dom.Element;
 import org.w3c.dom.Node;
 import org.w3c.dom.NodeList;
 
-import javax.xml.parsers.DocumentBuilder;
-import javax.xml.parsers.DocumentBuilderFactory;
-import java.io.File;
 import java.util.logging.Level;
 import java.util.logging.Logger;
 
@@ -23,21 +21,13 @@ public class TemplateDataPopulate {
     private static final Logger LOGGER = Logger.getLogger(TemplateDataPopulate.class.getName());
     
     private final FieldService fieldService;
-
-    public Document getXmlDocument() throws Exception {
-        DocumentBuilderFactory factory = DocumentBuilderFactory.newInstance();
-        DocumentBuilder builder = factory.newDocumentBuilder();
-        File initialCoreDataXml = new File("src/main/java/com/laacrm/main/core/xml/TemplateData.xml");
-        Document dataXmlDocument = builder.parse(initialCoreDataXml);
-        dataXmlDocument.getDocumentElement().normalize();
-        return dataXmlDocument;
-    }
+    private final RecordService recordService;
 
     public void populateFieldPropertiesRef() throws Exception {
         try {
             LOGGER.log(Level.INFO, "Populating FieldPropertiesRef....");
             if(!fieldService.isFieldPropertiesRefPopulated()){
-                Document dataXmlDocument = getXmlDocument();
+                Document dataXmlDocument = XmlUtils.loadXmlDocument("src/main/java/com/laacrm/main/core/xml/TemplateData.xml");
                 NodeList fieldPropsList = dataXmlDocument.getElementsByTagName("DefaultFieldProp");
 
                 for (int i = 0; i < fieldPropsList.getLength(); i++) {
@@ -62,6 +52,15 @@ public class TemplateDataPopulate {
             }
         } catch (Exception e) {
             LOGGER.log(Level.SEVERE, "Exception occurred while populating Field Properties Ref", e);
+            throw new Exception(e);
+        }
+    }
+
+    public void populateRecordsTable() throws Exception {
+        try {
+            recordService.createRecordTables();
+        } catch (Exception e) {
+            LOGGER.log(Level.SEVERE, "Exception occurred while populating Records Table", e);
             throw new Exception(e);
         }
     }
