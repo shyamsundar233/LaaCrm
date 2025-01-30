@@ -23,9 +23,9 @@ public class FieldController extends APIController {
     private final FieldService fieldService;
 
     @GetMapping("/fields")
-    public ResponseEntity<APIResponse> getFields(@RequestParam("moduleId") Long moduleId) {
+    public ResponseEntity<APIResponse> getFields(@RequestParam("moduleId") Long moduleId, @RequestParam("layoutId") Long layoutId) {
         Map<String, Object> details = new HashMap<>();
-        details.put("fields", getFieldDTOList(fieldService.findAll(moduleId)));
+        details.put("fields", getFieldDTOList(fieldService.findAll(moduleId, layoutId)));
         addResponse(HttpStatus.OK.value(), "Fields fetched Successfully", details);
         return response();
     }

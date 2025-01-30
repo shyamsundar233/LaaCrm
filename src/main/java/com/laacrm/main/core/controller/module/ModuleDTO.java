@@ -20,18 +20,18 @@ public class ModuleDTO {
 
     private String status;
 
-    private List<FieldDTO> fields = new ArrayList<>();
+    private List<LayoutDTO> layouts = new ArrayList<>();
 
     public ModuleDTO() {}
 
-    public ModuleDTO(String moduleId, String moduleName, String singularName, String pluralName, String type, String status, List<FieldDTO> fields) {
+    public ModuleDTO(String moduleId, String moduleName, String singularName, String pluralName, String type, String status, List<LayoutDTO> layouts) {
         this.moduleId = moduleId;
         this.moduleName = moduleName;
         this.singularName = singularName;
         this.pluralName = pluralName;
         this.type = type;
         this.status = status;
-        this.fields = fields;
+        this.layouts = layouts;
     }
 
 }

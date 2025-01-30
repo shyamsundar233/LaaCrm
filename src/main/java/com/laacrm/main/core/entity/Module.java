@@ -30,27 +30,35 @@ public class Module {
 
     @OneToMany(mappedBy = "module", cascade = CascadeType.ALL, orphanRemoval = true)
     @JsonManagedReference
-    private List<Field> fields = new ArrayList<>();
+    private List<Layout> layouts = new ArrayList<>();
 
     public Module() {}
 
-    public Module(String moduleName, String singularName, String pluralName, Integer type, Integer status, List<Field> fields) {
+    public Module(String moduleName, String singularName, String pluralName, Integer type, Integer status) {
         this.moduleName = moduleName;
         this.singularName = singularName;
         this.pluralName = pluralName;
         this.type = type;
         this.status = status;
-        this.fields = fields;
     }
 
-    public Module(Long moduleId, String moduleName, String singularName, String pluralName, Integer type, Integer status, List<Field> fields) {
+    public Module(String moduleName, String singularName, String pluralName, Integer type, Integer status, List<Layout> layouts) {
+        this.moduleName = moduleName;
+        this.singularName = singularName;
+        this.pluralName = pluralName;
+        this.type = type;
+        this.status = status;
+        this.layouts = layouts;
+    }
+
+    public Module(Long moduleId, String moduleName, String singularName, String pluralName, Integer type, Integer status, List<Layout> layouts) {
         this.moduleId = moduleId;
         this.moduleName = moduleName;
         this.singularName = singularName;
         this.pluralName = pluralName;
         this.type = type;
         this.status = status;
-        this.fields = fields;
+        this.layouts = layouts;
     }
 
 }

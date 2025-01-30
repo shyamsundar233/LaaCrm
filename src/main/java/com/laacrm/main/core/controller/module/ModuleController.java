@@ -1,9 +1,7 @@
 package com.laacrm.main.core.controller.module;
 
 import com.laacrm.main.core.controller.APIController;
-import com.laacrm.main.core.entity.Field;
-import com.laacrm.main.core.entity.FieldProperties;
-import com.laacrm.main.core.entity.FieldPropertiesRef;
+import com.laacrm.main.core.entity.*;
 import com.laacrm.main.core.entity.Module;
 import com.laacrm.main.core.service.ServiceWrapper;
 import lombok.AllArgsConstructor;
@@ -73,32 +71,60 @@ public class ModuleController extends APIController {
     }
 
     private Module getModuleEntityFromModuleDTO(ModuleDTO moduleDTO){
-        List<Field> fieldsList = new ArrayList<>();
-        for (FieldDTO fieldDTO : moduleDTO.getFields()) {
-            fieldsList.add(getFieldEntityFromFieldDTO(fieldDTO));
-        }
-        return new Module(
+        Module module = new Module(
                 moduleDTO.getModuleName(),
                 moduleDTO.getSingularName(),
                 moduleDTO.getPluralName(),
                 moduleDTO.getType() != null && !moduleDTO.getType().isEmpty() ? Integer.valueOf(moduleDTO.getType()) : null,
                 moduleDTO.getStatus() != null && !moduleDTO.getStatus().isEmpty() ? Integer.valueOf(moduleDTO.getStatus()) : null,
-                fieldsList);
+                null);
+        List<Layout> layoutsList = new ArrayList<>();
+        for(LayoutDTO layoutDTO : moduleDTO.getLayouts()){
+            Layout layout = new Layout(
+                    layoutDTO.getLayoutId() != null && !layoutDTO.getLayoutId().isEmpty() ? Long.valueOf(layoutDTO.getLayoutId()) : null,
+                    layoutDTO.getLayoutName(),
+                    null,
+                    Boolean.parseBoolean(layoutDTO.getIsDefault())
+            );
+            List<Field> fieldsList = new ArrayList<>();
+            for (FieldDTO fieldDTO : layoutDTO.getFields()) {
+                fieldsList.add(getFieldEntityFromFieldDTO(fieldDTO));
+            }
+            layout.setFields(fieldsList);
+            layoutsList.add(layout);
+        }
+        module.setLayouts(layoutsList);
+        return module;
     }
 
     private ModuleDTO getModuleDTOFromModuleEntity(Module module){
-        List<FieldDTO> fieldsList = new ArrayList<>();
-        for (Field field : module.getFields()) {
-            fieldsList.add(getFieldDTOFromFieldEntity(field));
-        }
-        return new ModuleDTO(
+        ModuleDTO moduleDTO = new ModuleDTO(
                 String.valueOf(module.getModuleId()),
                 module.getModuleName(),
                 module.getSingularName(),
                 module.getPluralName(),
                 String.valueOf(module.getType()),
                 String.valueOf(module.getStatus()),
-                fieldsList);
+                null
+        );
+        List<LayoutDTO> layoutDTOList = new ArrayList<>();
+        for (Layout layout : module.getLayouts()) {
+            LayoutDTO layoutDTO = new LayoutDTO(
+                    String.valueOf(layout.getLayoutId()),
+                    layout.getLayoutName(),
+                    String.valueOf(layout.getModule().getModuleId()),
+                    String.valueOf(layout.isDefault()),
+                    null
+            );
+            List<FieldDTO> fieldsList = new ArrayList<>();
+            for(Field field : layout.getFields()) {
+                fieldsList.add(getFieldDTOFromFieldEntity(field));
+            }
+            layoutDTO.setFields(fieldsList);
+            layoutDTOList.add(layoutDTO);
+        }
+        moduleDTO.setLayouts(layoutDTOList);
+        return moduleDTO;
     }
 
     public static Field getFieldEntityFromFieldDTO(FieldDTO fieldDTO){

@@ -1,8 +1,6 @@
 package com.laacrm.main.core.service;
 
-import com.laacrm.main.core.entity.Field;
-import com.laacrm.main.core.entity.FieldProperties;
-import com.laacrm.main.core.entity.FieldPropertiesRef;
+import com.laacrm.main.core.entity.*;
 import com.laacrm.main.core.entity.Module;
 import com.laacrm.main.core.repo.FieldPropertiesRefRepo;
 import com.laacrm.main.framework.AuthThreadLocal;
@@ -29,7 +27,6 @@ public class InitPopulateService {
     private static final Logger LOGGER = Logger.getLogger(InitPopulateService.class.getName());
 
     private final ModuleService moduleService;
-    private final FieldPropertiesRefRepo propertyRefRepo;
 
     public void populate() {
         LOGGER.log(Level.INFO, "Populating default data to CRM :: {0}", AuthThreadLocal.getCurrentTenant().getTenantId());
@@ -60,35 +57,47 @@ public class InitPopulateService {
                         modElement.getAttribute("singular-name"),
                         modElement.getAttribute("plural-name"),
                         Integer.valueOf(modElement.getAttribute("type")),
-                        Integer.valueOf(modElement.getAttribute("status")),
-                        null
+                        Integer.valueOf(modElement.getAttribute("status"))
                 );
-                NodeList modFields = modElement.getElementsByTagName("Field");
-                List<Field> fieldList = new ArrayList<>();
-                for (int fldIndex = 0; fldIndex < modFields.getLength(); fldIndex++) {
-                    Element fldElement = (Element) modFields.item(fldIndex);
-                    Field fld = new Field(
-                            fldElement.getAttribute("field-name"),
-                            Integer.valueOf(fldElement.getAttribute("field-type")),
-                            null
+                NodeList layout = modElement.getElementsByTagName("Layout");
+                List<Layout> modLayouts = new ArrayList<>();
+                for (int layoutIndex = 0; layoutIndex < layout.getLength(); layoutIndex++) {
+                    Element layoutElement = (Element) layout.item(layoutIndex);
+                    Layout modLayout = new Layout(
+                            layoutElement.getAttribute("layout-name"),
+                            Boolean.parseBoolean(layoutElement.getAttribute("is-default"))
                     );
-                    fld.setModule(module);
-                    NodeList fldProps = fldElement.getElementsByTagName("FieldProperties");
-                    List<FieldProperties> fldPropsList = new ArrayList<>();
-                    for (int propIndex = 0; propIndex < fldProps.getLength(); propIndex++) {
-                        Element propElement = (Element) fldProps.item(propIndex);
-                        FieldPropertiesRef propRef = new FieldPropertiesRef(propElement.getAttribute("property"));
-                        FieldProperties prop = new FieldProperties(
-                                fld,
-                                propRef,
-                                propElement.getAttribute("property-value")
+                    module.getLayouts().add(modLayout);
+                    NodeList modFields = layoutElement.getElementsByTagName("Field");
+                    List<Field> fieldList = new ArrayList<>();
+                    for (int fldIndex = 0; fldIndex < modFields.getLength(); fldIndex++) {
+                        Element fldElement = (Element) modFields.item(fldIndex);
+                        Field fld = new Field(
+                                fldElement.getAttribute("field-name"),
+                                Integer.valueOf(fldElement.getAttribute("field-type")),
+                                null
                         );
-                        fldPropsList.add(prop);
+                        fld.setModule(module);
+                        fld.setLayout(modLayout);
+                        NodeList fldProps = fldElement.getElementsByTagName("FieldProperties");
+                        List<FieldProperties> fldPropsList = new ArrayList<>();
+                        for (int propIndex = 0; propIndex < fldProps.getLength(); propIndex++) {
+                            Element propElement = (Element) fldProps.item(propIndex);
+                            FieldPropertiesRef propRef = new FieldPropertiesRef(propElement.getAttribute("property"));
+                            FieldProperties prop = new FieldProperties(
+                                    fld,
+                                    propRef,
+                                    propElement.getAttribute("property-value")
+                            );
+                            fldPropsList.add(prop);
+                        }
+                        fld.setFieldProperties(fldPropsList);
+                        fieldList.add(fld);
                     }
-                    fld.setFieldProperties(fldPropsList);
-                    fieldList.add(fld);
+                    modLayout.setFields(fieldList);
+                    modLayouts.add(modLayout);
                 }
-                module.setFields(fieldList);
+                module.setLayouts(modLayouts);
                 moduleService.save(module);
                 LOGGER.log(Level.INFO, "{0} Default Module populated", module.getModuleName());
             }

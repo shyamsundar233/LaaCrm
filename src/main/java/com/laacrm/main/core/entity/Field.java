@@ -25,6 +25,12 @@ public class Field {
     @ToString.Exclude
     private Module module;
 
+    @ManyToOne
+    @JoinColumn(name = "layout_id", nullable = false)
+    @JsonBackReference
+    @ToString.Exclude
+    private Layout layout;
+
     private String fieldName;
 
     private Integer fieldType;

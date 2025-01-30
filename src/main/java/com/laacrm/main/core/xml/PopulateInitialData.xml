@@ -1,40 +1,52 @@
 <InitialCoreData>
     <SystemModules>
         <Module module-name="Leads" singular-name="Lead" plural-name="Leads" type="1" status="1">
-            <Field module="Leads" field-name="Lead Name" field-type="1">
-                <FieldProperties field="Lead Name" property="isMandatory" property-value="true" />
-                <FieldProperties field="Lead Name" property="maxChar" property-value="100" />
-            </Field>
+            <Layout layout-name="Standard" is-default="true">
+                <Field module="Leads" field-name="Lead Name" field-type="1">
+                    <FieldProperties field="Lead Name" property="isMandatory" property-value="true" />
+                    <FieldProperties field="Lead Name" property="maxChar" property-value="100" />
+                </Field>
+            </Layout>
         </Module>
         <Module module-name="Contacts" singular-name="Contact" plural-name="Contacts" type="1" status="1">
-            <Field module="Contacts" field-name="Contact Name" field-type="1">
+            <Layout layout-name="Standard" is-default="true">
+                <Field module="Contacts" field-name="Contact Name" field-type="1">
                 <FieldProperties field="Contact Name" property="isMandatory" property-value="true" />
                 <FieldProperties field="Contact Name" property="maxChar" property-value="100" />
             </Field>
+            </Layout>
         </Module>
         <Module module-name="Accounts" singular-name="Account" plural-name="Accounts" type="1" status="1">
-            <Field module="Accounts" field-name="Account Name" field-type="1">
+            <Layout layout-name="Standard" is-default="true">
+                <Field module="Accounts" field-name="Account Name" field-type="1">
                 <FieldProperties field="Account Name" property="isMandatory" property-value="true" />
                 <FieldProperties field="Account Name" property="maxChar" property-value="100" />
             </Field>
+            </Layout>
         </Module>
         <Module module-name="Vendors" singular-name="Vendor" plural-name="Vendors" type="1" status="1">
-            <Field module="Vendors" field-name="Vendor Name" field-type="1">
+            <Layout layout-name="Standard" is-default="true">
+                <Field module="Vendors" field-name="Vendor Name" field-type="1">
                 <FieldProperties field="Vendor Name" property="isMandatory" property-value="true" />
                 <FieldProperties field="Vendor Name" property="maxChar" property-value="100" />
             </Field>
+            </Layout>
         </Module>
         <Module module-name="Products" singular-name="Product" plural-name="Products" type="1" status="1">
-            <Field module="Products" field-name="Product Name" field-type="1">
+            <Layout layout-name="Standard" is-default="true">
+                <Field module="Products" field-name="Product Name" field-type="1">
                 <FieldProperties field="Product Name" property="isMandatory" property-value="true" />
                 <FieldProperties field="Product Name" property="maxChar" property-value="100" />
             </Field>
+            </Layout>
         </Module>
         <Module module-name="Sales" singular-name="Sale" plural-name="Sales" type="1" status="1">
-            <Field module="Sales" field-name="Sale Name" field-type="1">
+            <Layout layout-name="Standard" is-default="true">
+                <Field module="Sales" field-name="Sale Name" field-type="1">
                 <FieldProperties field="Sale Name" property="isMandatory" property-value="true" />
                 <FieldProperties field="Sale Name" property="maxChar" property-value="100" />
             </Field>
+            </Layout>
         </Module>
     </SystemModules>
 </InitialCoreData>

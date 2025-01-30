@@ -4,9 +4,7 @@ import com.laacrm.main.core.FieldConstants;
 import com.laacrm.main.core.ModuleConstants;
 import com.laacrm.main.core.controller.APIException;
 import com.laacrm.main.core.dao.DaoHelper;
-import com.laacrm.main.core.entity.Field;
-import com.laacrm.main.core.entity.FieldProperties;
-import com.laacrm.main.core.entity.FieldPropertiesRef;
+import com.laacrm.main.core.entity.*;
 import com.laacrm.main.core.entity.Module;
 import jakarta.transaction.Transactional;
 import lombok.AllArgsConstructor;
@@ -30,6 +28,7 @@ public class ModuleService implements ServiceWrapper<Module> {
     private final DaoHelper<Module, Long> moduleDaoHelper;
     private final ModuleValidator moduleValidator = new ModuleValidator();
     private final FieldValidator fieldValidator = new FieldValidator();
+    private final LayoutValidator layoutValidator = new LayoutValidator();
     private final FieldService fieldService;
 
     @Override
@@ -46,11 +45,15 @@ public class ModuleService implements ServiceWrapper<Module> {
     public Module save(Module module) {
         moduleValidator.validateSave(module);
         module.setModuleName(getNextAvailableModuleName());
-        for(Field field : module.getFields()) {
-            field.setModule(module);
+        layoutValidator.validateSave(module.getLayouts());
+        for(Layout layout : module.getLayouts()) {
+            for(Field field : layout.getFields()) {
+                layout.setModule(module);
+                field.setLayout(layout);
+            }
+            fieldValidator.validateSave(layout.getFields());
+            updateFieldRefData(layout.getFields());
         }
-        fieldValidator.validateSave(module.getFields());
-        updateFieldRefData(module.getFields());
         return moduleDaoHelper.save(module);
     }
 
@@ -73,8 +76,8 @@ public class ModuleService implements ServiceWrapper<Module> {
             existingModule.setStatus(module.getStatus());
         }
         moduleValidator.validateUpdate(existingModule);
-        updateFieldsInExistingModule(existingModule, module);
-        fieldValidator.validateSave(existingModule.getFields());
+        updateLayoutInExistingModule(existingModule, module);
+        layoutValidator.validateSave(existingModule.getLayouts());
         return moduleDaoHelper.update(existingModule);
     }
 
@@ -90,14 +93,34 @@ public class ModuleService implements ServiceWrapper<Module> {
         }
     }
 
-    private void updateFieldsInExistingModule(Module existingModule, Module module) {
-        for(Field field : module.getFields()) {
+    private void updateLayoutInExistingModule(Module existingModule, Module module){
+        for(Layout layout : module.getLayouts()) {
+            if(layout.getLayoutId() == null){
+                layout.setModule(existingModule);
+                existingModule.getLayouts().add(layout);
+                fieldValidator.validateSave(layout.getFields());
+            }else {
+                Long layoutId = layout.getLayoutId();
+                Layout existingLayout = existingModule.getLayouts().stream().filter(elem -> elem.getLayoutId().equals(layoutId)).findFirst().orElse(null);
+                if(existingLayout != null){
+                    if(layout.getLayoutName() != null && !layout.getLayoutName().isEmpty()){
+                        existingLayout.setLayoutName(layout.getLayoutName());
+                    }
+                    updateFieldsInExistingModule(existingLayout, layout);
+                    fieldValidator.validateSave(existingLayout.getFields());
+                }
+            }
+        }
+    }
+
+    private void updateFieldsInExistingModule(Layout existingLayout, Layout layout) {
+        for(Field field : layout.getFields()) {
             if(field.getFieldId() == null){
-                field.setModule(existingModule);
-                existingModule.getFields().add(field);
+                field.setLayout(existingLayout);
+                existingLayout.getFields().add(field);
             }else{
                 Long fieldId = field.getFieldId();
-                Field existingField = existingModule.getFields().stream().filter(fld -> fld.getFieldId().equals(fieldId)).findFirst().orElse(null);
+                Field existingField = existingLayout.getFields().stream().filter(fld -> fld.getFieldId().equals(fieldId)).findFirst().orElse(null);
                 if(existingField != null){
                     if(field.getFieldName() != null && !field.getFieldName().isEmpty()){
                         existingField.setFieldName(field.getFieldName());
@@ -190,6 +213,26 @@ public class ModuleService implements ServiceWrapper<Module> {
         }
     }
 
+    static class LayoutValidator {
+
+        public void validateSave(List<Layout> layouts) {
+            defaultValidation(layouts);
+        }
+
+        private void defaultValidation(List<Layout> layouts) {
+            for(Layout layout : layouts){
+                if(layout.getLayoutName() == null || layout.getLayoutName().isEmpty()){
+                    throw new APIException(HttpStatus.BAD_REQUEST.value(), "Layout Name cannot be null or empty");
+                }
+                Pattern pattern = Pattern.compile(ModuleConstants.MODULE_NAME_REGEX);
+                if(!pattern.matcher(layout.getLayoutName()).matches()) {
+                    throw new APIException(HttpStatus.BAD_REQUEST.value(), "Special characters not allowed in Layout Name");
+                }
+            }
+        }
+
+    }
+
     static class FieldValidator {
 
         public void validateSave(List<Field> fields) {
@@ -208,8 +251,8 @@ public class ModuleService implements ServiceWrapper<Module> {
                 if(field.getFieldType() == null || !FieldConstants.FieldType.isValidType(field.getFieldType())) {
                     throw new APIException(HttpStatus.BAD_REQUEST.value(), "Field Type is not valid");
                 }
-                if(field.getModule() == null) {
-                    throw new APIException(HttpStatus.BAD_REQUEST.value(), "Module cannot be null");
+                if(field.getLayout() == null) {
+                    throw new APIException(HttpStatus.BAD_REQUEST.value(), "Layout cannot be null");
                 }
             }
             Set<String> fieldNames = new HashSet<>();

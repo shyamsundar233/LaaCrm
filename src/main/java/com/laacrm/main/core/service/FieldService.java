@@ -4,6 +4,7 @@ import com.laacrm.main.core.controller.APIException;
 import com.laacrm.main.core.dao.DaoHelper;
 import com.laacrm.main.core.entity.Field;
 import com.laacrm.main.core.entity.FieldPropertiesRef;
+import com.laacrm.main.core.entity.Layout;
 import com.laacrm.main.core.entity.Module;
 import com.laacrm.main.core.repo.FieldPropertiesRefRepo;
 import jakarta.persistence.criteria.CriteriaBuilder;
@@ -22,18 +23,21 @@ public class FieldService implements ServiceWrapper<Field> {
 
     private final DaoHelper<Field, Long> fieldDaoHelper;
     private final ModuleService moduleService;
+    private final LayoutService layoutService;
     private final FieldPropertiesRefRepo fieldPropertiesRefRepo;
 
     @Autowired
-    public FieldService(DaoHelper<Field, Long> fieldDaoHelper, @Lazy ModuleService moduleService, @Lazy FieldPropertiesRefRepo fieldPropertiesRefRepo) {
+    public FieldService(DaoHelper<Field, Long> fieldDaoHelper, @Lazy ModuleService moduleService, @Lazy FieldPropertiesRefRepo fieldPropertiesRefRepo, @Lazy LayoutService layoutService) {
         this.fieldDaoHelper = fieldDaoHelper;
         this.moduleService = moduleService;
         this.fieldPropertiesRefRepo = fieldPropertiesRefRepo;
+        this.layoutService = layoutService;
     }
 
     @Override
     public List<Field> findAll(Object... param) {
         Long moduleId = param.length > 0 ? Long.valueOf(param[0].toString()) : null;
+        Long layoutId = param.length > 1 ? Long.valueOf(param[1].toString()) : null;
         if(moduleId == null){
             throw new APIException(HttpStatus.BAD_REQUEST.value(), "Module ID is required");
         }
@@ -41,10 +45,15 @@ public class FieldService implements ServiceWrapper<Field> {
         if(module == null){
             throw new APIException(HttpStatus.NOT_FOUND.value(), "Module does not exist");
         }
+        Layout layout = layoutId != null ? layoutService.findById(layoutId) : layoutService.getDefaultLayout(module);
+        if(layout == null){
+            throw new APIException(HttpStatus.NOT_FOUND.value(), "Layout does not exist");
+        }
         return fieldDaoHelper.findByCriteria(Field.class, context -> {
             CriteriaBuilder cb = context.getCriteriaBuilder();
             Root<Field> root = context.getRoot();
             context.addPredicate(cb.equal(root.get("module"), module));
+            context.addPredicate(cb.equal(root.get("layout"), layout));
         });
     }
 
