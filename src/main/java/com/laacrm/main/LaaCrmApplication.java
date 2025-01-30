@@ -6,9 +6,11 @@ import jakarta.annotation.PostConstruct;
 import lombok.AllArgsConstructor;
 import org.springframework.boot.SpringApplication;
 import org.springframework.boot.autoconfigure.SpringBootApplication;
+import org.springframework.context.annotation.PropertySource;
 
 @SpringBootApplication
 @AllArgsConstructor
+@PropertySource("classpath:feature-limit.properties")
 public class LaaCrmApplication {
 
 	private final InitialPopulationService initPopulationService;

@@ -21,7 +21,6 @@ public class RecordService {
 
     private final FeatureLimits featureLimits;
 
-    @Transactional
     public void createRecordTables() {
         Document initData = XmlUtils.loadXmlDocument("src/main/java/com/laacrm/main/core/xml/PopulateInitialData.xml");
         NodeList defaultModules = initData.getElementsByTagName("Module");
@@ -29,7 +28,7 @@ public class RecordService {
             Element module = (Element) defaultModules.item(index);
             createRecordTableForModule(module.getAttribute("module-name"));
         }
-        for (int index = 0 ; index < 200; index++) {
+        for (int index = 0 ; index < featureLimits.getModuleLimit(); index++) {
             createRecordTableForModule("CustomModule" + index);
         }
     }
@@ -40,8 +39,8 @@ public class RecordService {
                 .append(moduleName + "_rec")
                 .append(" (")
                 .append("record_id BIGINT PRIMARY KEY, ");
-        for (int index = 0 ; index < 150; index++) {
-            if(index == 149){
+        for (int index = 0 ; index < featureLimits.getFieldLimit(); index++) {
+            if(index == featureLimits.getFieldLimit() - 1){
                 sql.append("field_").append(index).append(" TEXT");
             }else {
                 sql.append("field_").append(index).append(" TEXT, ");

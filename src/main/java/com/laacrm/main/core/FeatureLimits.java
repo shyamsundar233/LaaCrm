@@ -1,14 +1,16 @@
 package com.laacrm.main.core;
 
+import lombok.Data;
 import org.springframework.boot.context.properties.ConfigurationProperties;
 import org.springframework.stereotype.Component;
 
 @Component
 @ConfigurationProperties(prefix = "limit")
+@Data
 public class FeatureLimits {
 
-    public Integer MODULE_LIMIT;
+    private Integer moduleLimit;
 
-    public Integer FIELD_LIMIT;
+    private Integer fieldLimit;
 
 }
