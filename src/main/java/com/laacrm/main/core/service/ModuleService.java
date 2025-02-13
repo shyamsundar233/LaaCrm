@@ -11,6 +11,7 @@ import lombok.AllArgsConstructor;
 import org.springframework.http.HttpStatus;
 import org.springframework.stereotype.Service;
 
+import java.util.ArrayList;
 import java.util.HashSet;
 import java.util.List;
 import java.util.Set;
@@ -54,6 +55,7 @@ public class ModuleService implements ServiceWrapper<Module> {
             fieldValidator.validateSave(layout.getFields());
             updateFieldRefData(layout.getFields());
         }
+        updateFieldRecColName(module);
         return moduleDaoHelper.save(module);
     }
 
@@ -156,6 +158,30 @@ public class ModuleService implements ServiceWrapper<Module> {
             moduleCount++;
         }
         return null;
+    }
+
+    private void updateFieldRecColName(Module module){
+        for(Layout layout : module.getLayouts()){
+            List<String> existingColNames = new ArrayList<>(layout.getFields().stream().map(Field::getRecColName).toList());
+            String baseColName = module.getModuleName() + "::field_";
+            for(int index = 0 ; index < layout.getFields().size() ; index++){
+                Field field = layout.getFields().get(index);
+                String colName = field.getRecColName();
+                if(colName == null || colName.isEmpty()){
+                    int itr = 0;
+                    while (true){
+                        if(!existingColNames.contains(baseColName + itr)){
+                            colName = baseColName + itr;
+                            field.setRecColName(colName);
+                            existingColNames.add(colName);
+                            break;
+                        }
+                        itr++;
+                    }
+                }
+                existingColNames.add(colName);
+            }
+        }
     }
 
     class ModuleValidator {
