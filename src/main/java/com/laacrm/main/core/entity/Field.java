@@ -39,6 +39,8 @@ public class Field {
     @JsonManagedReference
     private List<FieldProperties> fieldProperties = new ArrayList<>();
 
+    private String recColName;
+
     public Field() {}
 
     public Field(String fieldName, Integer fieldType, List<FieldProperties> fieldProperties) {
