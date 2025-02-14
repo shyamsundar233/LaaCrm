@@ -1,7 +1,8 @@
-import {BrowserRouter, Navigate, Route, Routes} from "react-router-dom";
 import App from "../App";
 import PrivateRoute from "./PrivateRoute";
-import Dashboard from "../Dashboard/Dashboard";
+import Dashboard from "../components/dashboard/Dashboard";
+import {BrowserRouter, Navigate, Route, Routes} from "react-router-dom";
+import Login from "../components/login/Login";
 
 const Router = () => {
     return (
@@ -9,6 +10,7 @@ const Router = () => {
             <Routes>
                 <Route exact path="/" element={<Navigate to="/app/dashboard"/>}/>
                 <Route path="/app/*" element={<PrivateRoute component={authRoutes}/>} />
+                <Route path="/login" element={<Login />} />
             </Routes>
         </BrowserRouter>
     );
