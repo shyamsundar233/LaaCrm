@@ -7,7 +7,7 @@ const moduleSlice = createSlice({
     },
     reducers: {
         loadModules: (state, action) => {
-            state.modules.push(action.payload);
+            state.modules = action.payload;
         }
     }
 });

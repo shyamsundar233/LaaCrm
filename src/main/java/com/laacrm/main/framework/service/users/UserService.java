@@ -16,4 +16,5 @@ public interface UserService {
 
     Users authenticateUser(LoginUser loginUserDetails);
 
+    void authenticateToken(String token, String username);
 }

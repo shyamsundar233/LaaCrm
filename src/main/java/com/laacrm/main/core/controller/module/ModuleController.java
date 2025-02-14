@@ -17,7 +17,7 @@ import java.util.Map;
 @RestController
 @RequestMapping("/v1/api")
 @AllArgsConstructor
-@CrossOrigin(origins = "http://localhost:3000") // Allow React frontend
+@CrossOrigin(origins = "http://localhost:3000")
 public class ModuleController extends APIController {
 
     private final ServiceWrapper<Module> moduleService;

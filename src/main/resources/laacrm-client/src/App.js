@@ -1,20 +1,28 @@
 import './App.css';
 import {Container} from "@mui/material";
-import {Outlet} from "react-router-dom";
+import {Outlet, useNavigate} from "react-router-dom";
 import Title from "./components/title/Title";
 import SideBar from "./components/sideBar/SideBar";
-import {useDispatch} from "react-redux";
 import {useEffect} from "react";
 import apiEngine from "./api/apiEngine";
+import authService from "./api/authService";
+import {useDispatch} from "react-redux";
+import {loadModules} from "./data/slice/moduleSlice";
 
 const App = () => {
 
+    const nav = useNavigate();
     const dispatch = useDispatch();
 
     useEffect(() => {
-        apiEngine.requestHelper("GET", "/v1/api/module").then((response) => {
-            debugger
-        });
+        authService.authenticateToken().then(() => {
+            apiEngine.requestHelper("GET", "/v1/api/module").then((response) => {
+                dispatch(loadModules(response.data.data.modules));
+            });
+        }).catch(() => {
+            authService.clearAuthData();
+            nav("/login");
+        })
     },[])
 
     return (

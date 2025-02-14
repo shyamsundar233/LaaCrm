@@ -1,5 +1,7 @@
 package com.laacrm.main.framework.service.users;
 
+import com.laacrm.main.core.config.JwtService;
+import com.laacrm.main.core.controller.APIException;
 import com.laacrm.main.framework.entities.Tenant;
 import com.laacrm.main.framework.entities.Users;
 import com.laacrm.main.framework.exception.FrameworkException;
@@ -11,6 +13,8 @@ import lombok.AllArgsConstructor;
 import org.springframework.http.HttpStatus;
 import org.springframework.security.authentication.AuthenticationManager;
 import org.springframework.security.authentication.UsernamePasswordAuthenticationToken;
+import org.springframework.security.core.userdetails.UserDetails;
+import org.springframework.security.core.userdetails.UserDetailsService;
 import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.stereotype.Service;
 
@@ -30,6 +34,8 @@ public class UserServiceImpl implements UserService {
     private final TenantService tenantService;
     private final AuthenticationManager authenticationManager;
     private final PasswordEncoder passwordEncoder;
+    private final UserDetailsService userDetailsService;
+    private final JwtService jwtService;
 
     @Override
     public List<UserDTO> getAllUsers() {
@@ -90,6 +96,14 @@ public class UserServiceImpl implements UserService {
             return loginUser;
         } catch (Exception exp) {
             throw new FrameworkException(HttpStatus.UNAUTHORIZED.value(), exp.getMessage());
+        }
+    }
+
+    @Override
+    public void authenticateToken(String token, String username) {
+        UserDetails userDetails = this.userDetailsService.loadUserByUsername(username);
+        if(!jwtService.isTokenValid(token, userDetails)) {
+            throw new APIException(HttpStatus.UNAUTHORIZED.value(), "Token is invalid");
         }
     }
 

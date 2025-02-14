@@ -10,10 +10,7 @@ import com.laacrm.main.framework.service.users.UserService;
 import lombok.AllArgsConstructor;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
-import org.springframework.web.bind.annotation.PostMapping;
-import org.springframework.web.bind.annotation.RequestBody;
-import org.springframework.web.bind.annotation.RequestMapping;
-import org.springframework.web.bind.annotation.RestController;
+import org.springframework.web.bind.annotation.*;
 
 import java.util.HashMap;
 import java.util.Map;
@@ -43,7 +40,7 @@ public class UsersController extends APIController{
         }
     }
 
-    @PostMapping("/authenticate")
+    @PostMapping("/login")
     public ResponseEntity<APIResponse> authenticate(@RequestBody LoginUser loginUserDetails) {
         try{
             Users loginUser = userService.authenticateUser(loginUserDetails);
@@ -57,6 +54,13 @@ public class UsersController extends APIController{
             LOGGER.log(Level.SEVERE, "==========> User Login Failed :: {0} <==========", exp.getMessage());
             throw new APIException(HttpStatus.UNAUTHORIZED.value(), exp.getMessage());
         }
+    }
+
+    @GetMapping("/authenticate")
+    public ResponseEntity<APIResponse> authenticate(@RequestParam(name = "token") String token, @RequestParam(name = "username") String username) {
+        userService.authenticateToken(token, username);
+        addResponse(HttpStatus.OK.value(), "User Authenticated Successfully");
+        return response();
     }
 
 }
