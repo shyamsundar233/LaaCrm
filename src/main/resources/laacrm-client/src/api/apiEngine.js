@@ -1,4 +1,5 @@
 import axios from "axios";
+import authService from "./authService";
 
 const requestHelper = (method, url, data, params) => {
     return axios({
@@ -7,7 +8,7 @@ const requestHelper = (method, url, data, params) => {
         data: data,
         params: params,
         headers: {
-            'Authorization': `Bearer eyJhbGciOiJIUzI1NiJ9.eyJzdWIiOiJUZXN0IFVzZXIgMSIsImlhdCI6MTczOTQ2MDUzNiwiZXhwIjoxNzM5NTQ2OTM2fQ.LSsybzrYloyxnFXCIQ0eSc-_dAhamdH8efp6advmiqw`,
+            'Authorization': `Bearer ${authService.getAuthData().token}`,
         }
     });
 }

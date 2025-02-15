@@ -1,0 +1,14 @@
+.banner-box {
+    height: 90vh;
+    display: flex;
+    justify-content: center;
+    flex-direction: column;
+}
+
+.mod-icon-banner {
+    width: 100px;
+}
+
+.create-btn-banner {
+    width: 500px;
+}

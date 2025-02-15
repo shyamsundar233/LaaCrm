@@ -17,6 +17,17 @@
     justify-content: center;
 }
 
+.d-flex-j-center-a-center {
+    display: flex;
+    justify-content: center;
+    align-items: center;
+}
+
 .pointer {
     cursor: pointer;
+}
+
+.heading-1 {
+    font-size: 1.5rem !important;
+    font-weight: 700 !important;
 }
