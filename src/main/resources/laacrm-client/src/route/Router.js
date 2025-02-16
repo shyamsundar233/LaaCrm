@@ -4,9 +4,8 @@ import Dashboard from "../components/dashboard/Dashboard";
 import {BrowserRouter, Navigate, Route, Routes} from "react-router-dom";
 import Login from "../components/login/Login";
 import Banner from "../components/module/banner/Banner";
-import Modules from "../components/module/Module";
 import RecordCreate from "../components/module/create/RecordCreatePage/RecordCreate";
-import Create from "../components/module/create/Create";
+import Redirect from "./Redirect";
 
 const Router = () => {
     return (
@@ -25,10 +24,12 @@ const authRoutes = () => (
     <Routes>
         <Route path="/" element={<App />}>
             <Route path="dashboard" element={<Dashboard/>}/>
-            <Route path="module" element={<Modules/>}>
-                <Route path=":moduleName/banner" element={<Banner/>}/>
-                <Route path=":moduleName/create" element={<Create/>}>
-                    <Route path=":layoutId" element={<RecordCreate/>} />
+            <Route exact path="module" element={<Redirect/>}>
+                <Route exact path=":moduleName" element={<Redirect/>}>
+                    <Route path="banner" element={<Banner/>}/>
+                    <Route exact path="create" element={<Redirect/>}>
+                        <Route path=":layoutId" element={<RecordCreate/>} />
+                    </Route>
                 </Route>
             </Route>
         </Route>
