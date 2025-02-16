@@ -17,6 +17,11 @@
     justify-content: center;
 }
 
+.d-flex-a-center {
+    display: flex;
+    align-items: center;
+}
+
 .d-flex-j-center-a-center {
     display: flex;
     justify-content: center;

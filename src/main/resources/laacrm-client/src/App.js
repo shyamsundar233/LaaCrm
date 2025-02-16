@@ -24,6 +24,17 @@ const App = () => {
                         }
                     }
                 }
+            },
+            MuiTextField: {
+                styleOverrides: {
+                    root: {
+                        "& .MuiOutlinedInput-input": {
+                            height: "1px",
+                            fontSize: "15px",
+                            padding: "20px"
+                        }
+                    }
+                }
             }
         }
     });
