@@ -1,5 +1,5 @@
 import "./Login.css";
-import {Box, Button, Container, createTheme, Grid2, TextField, ThemeProvider} from "@mui/material";
+import {Box, Button, Container, createTheme, Grid2, TextField, ThemeProvider, Link} from "@mui/material";
 import {useEffect, useState} from "react";
 import axios from "axios";
 import authService from "../../api/authService";
@@ -81,7 +81,7 @@ const Login = ({operation}) => {
         <Container maxWidth="lg">
             <Box className={`login-box-container`}>
                 <Box className={`login-form-container`} style={{
-                    height: operation === 'login' ? `370px` : `450px`
+                    height: operation === 'login' ? `380px` : `480px`
                 }}>
                     <Box className={`mt-4 d-flex-j-center h3`}>
                         Welcome to Laa CRM !!!
@@ -96,6 +96,7 @@ const Login = ({operation}) => {
                                     <TextField id="standard-basic" label="Username/Email" variant="outlined" onChange={e => setUsername(e.target.value)}/><br/>
                                     <TextField id="standard-basic" label="Password" variant="outlined" type="password" onChange={e => setPassword(e.target.value)}/>
                                     <Button onClick={handleLogin} variant={`contained`} className={`mt-4`}>Log In</Button>
+                                    <Link className={`mt-3 text-center`}  href={`/register`}>Click Here to Register</Link>
                                 </>
                             ): (
                                 <>
@@ -120,6 +121,7 @@ const Login = ({operation}) => {
                                         </Grid2>
                                     </Grid2>
                                     <Button onClick={handleRegister} variant={`contained`} className={`mt-4`}>Sign In</Button>
+                                    <Link className={`mt-3 text-center`} href={`/login`}>Click Here to Login</Link>
                                 </>
 
                             )}
