@@ -30,7 +30,7 @@ public class Users implements UserDetails {
     @Email(message = "Enter a valid email for user")
     private String email;
 
-    @Column(unique = true, nullable = false)
+    @Column(unique = true)
     private String phone;
 
     @Column(nullable = false)

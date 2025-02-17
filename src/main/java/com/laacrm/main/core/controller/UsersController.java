@@ -1,6 +1,8 @@
 package com.laacrm.main.core.controller;
 
 import com.laacrm.main.core.config.JwtService;
+import com.laacrm.main.core.service.InitPopulateService;
+import com.laacrm.main.framework.AuthThreadLocal;
 import com.laacrm.main.framework.entities.Users;
 import com.laacrm.main.framework.exception.FrameworkException;
 import com.laacrm.main.framework.service.FrameworkConstants;
@@ -26,6 +28,7 @@ public class UsersController extends APIController{
 
     private final UserService userService;
     private final JwtService jwtService;
+    private final InitPopulateService initPopulateService;
 
     @PostMapping("/saveUser")
     public ResponseEntity<APIResponse> saveUser(@RequestBody UserDTO userDetails) {
@@ -44,8 +47,11 @@ public class UsersController extends APIController{
     public ResponseEntity<APIResponse> authenticate(@RequestBody LoginUser loginUserDetails) {
         try{
             Users loginUser = userService.authenticateUser(loginUserDetails);
-            String jwtToken = jwtService.generateToken(loginUser);
+            AuthThreadLocal.setCurrentUser(loginUser);
+            AuthThreadLocal.setCurrentTenant(loginUser.getTenant());
+            String jwtToken = jwtService.generateToken(loginUser, loginUser.getUserId());
             Map<String, Object> details = new HashMap<>();
+            details.put("initialized", initPopulateService.isInitialized());
             details.put("token", jwtToken);
             details.put("expiresIn", String.valueOf(jwtService.getExpirationTime()));
             addResponse(HttpStatus.OK.value(), "User Authenticated Successfully", details);

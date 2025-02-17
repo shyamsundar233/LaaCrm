@@ -1,6 +1,9 @@
 import axios from "axios";
 
 const authenticateToken = () => {
+    if(!localStorage.getItem("token") || !localStorage.getItem("username")) {
+        return Promise.reject();
+    }
     return axios({
         method: "GET",
         url: "/v1/api/users/authenticate",

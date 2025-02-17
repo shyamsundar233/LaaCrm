@@ -116,8 +116,6 @@ public class UserServiceImpl implements UserService {
         exceptionCode = exceptionCode == -1 && userDetails.getPassword().isEmpty() ? 4 : exceptionCode;
         exceptionCode = exceptionCode == -1 && userDetails.getEmail() == null ? 5 : exceptionCode;
         exceptionCode = exceptionCode == -1 && userDetails.getEmail().isEmpty() ? 6 : exceptionCode;
-        exceptionCode = exceptionCode == -1 && userDetails.getPhone() == null ? 7 : exceptionCode;
-        exceptionCode = exceptionCode == -1 && userDetails.getPhone().isEmpty() ? 8 : exceptionCode;
         exceptionCode = exceptionCode == -1 && userDetails.getFirstName() == null ? 9 : exceptionCode;
         exceptionCode = exceptionCode == -1 && userDetails.getFirstName().isEmpty() ? 10 : exceptionCode;
         exceptionCode = exceptionCode == -1 && userDetails.getLastName() == null ? 11 : exceptionCode;
@@ -133,8 +131,6 @@ public class UserServiceImpl implements UserService {
                 case 4 -> "Password cannot be empty";
                 case 5 -> "Email cannot be null";
                 case 6 -> "Email cannot be empty";
-                case 7 -> "Phone cannot be null";
-                case 8 -> "Phone cannot be empty";
                 case 9 -> "First Name cannot be null";
                 case 10 -> "First Name cannot be empty";
                 case 11 -> "Last Name cannot be null";

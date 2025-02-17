@@ -14,7 +14,8 @@ const Router = () => {
                 <Route exact path="/" element={<Navigate to="/app/dashboard"/>}/>
                 <Route exact path="/app" element={<Navigate to="/app/dashboard"/>}/>
                 <Route path="/app/*" element={<PrivateRoute component={authRoutes}/>} />
-                <Route path="/login" element={<Login />} />
+                <Route path="/login" element={<Login operation="login"/>} />
+                <Route path="/register" element={<Login operation="register"/>} />
             </Routes>
         </BrowserRouter>
     );
