@@ -14,8 +14,8 @@ const RecordCreate = () => {
     const [module, setModule] = useState({});
     const [layout, setLayout] = useState([]);
     const [fields, setFields] = useState([]);
+    const [recordDetails, setRecordDetails] = useState({});
     const [errorMessage, setErrorMessage] = useState("");
-    const recordDetails = {};
 
     useEffect(() => {
         let moduleObj = modules.find(elem => elem.moduleName === moduleName);
@@ -35,7 +35,9 @@ const RecordCreate = () => {
     },[errorMessage]);
 
     const onFieldValueChange = (fieldName, fieldValue) => {
-        recordDetails[fieldName] = fieldValue;
+        let recordDtls = recordDetails;
+        recordDtls[fieldName] = fieldValue;
+        setRecordDetails(recordDtls);
     }
 
     const onRecordCreate = () => {
@@ -46,7 +48,7 @@ const RecordCreate = () => {
                 recordDetails: recordDetails
             }
             apiEngine.requestHelper("POST", `/v1/api/${module.moduleId}/record`, data).then(res => {
-                debugger
+                navigate(`/app/module/${module.moduleName}`);
             })
         }
     }
@@ -57,7 +59,7 @@ const RecordCreate = () => {
             let props = field.fieldProperties;
             for(let index1 = 0; index1 < props.length; index1++) {
                 let prop = props[index1];
-                if(prop.propertyName === "isMandatory" && !recordDetails[field.fieldName]){
+                if(prop.propertyName === "isMandatory" && prop.propertyValue === 'true' && !recordDetails[field.fieldName]){
                     setErrorMessage(`${field.fieldName} is mandatory`);
                     return false;
                 }else if(prop.propertyName === "maxChar" && recordDetails[field.fieldName]){
@@ -94,7 +96,7 @@ const RecordCreate = () => {
                         <Grid2 container spacing={4}>
                             {fields.map((field, index) => (
                                 <Grid2 size={6}>
-                                    <Field field={field} fieldProps={field.fieldProperties} onValueChange={onFieldValueChange} />
+                                    <Field field={field} fieldProps={field.fieldProperties} recordDetails={recordDetails} onValueChange={onFieldValueChange} />
                                 </Grid2>
                             ))}
                         </Grid2>
@@ -105,7 +107,7 @@ const RecordCreate = () => {
     )
 }
 
-const Field = ({field, fieldProps, onValueChange}) => {
+const Field = ({field, fieldProps, recordDetails, onValueChange}) => {
 
     const [options, setOptions] = useState([]);
     const [defValue, setDefValue] = useState(null);
@@ -128,6 +130,7 @@ const Field = ({field, fieldProps, onValueChange}) => {
                 return <TextField
                     variant="outlined"
                     fullWidth
+                    value={recordDetails[field.fieldName]}
                     onChange={(event) => onValueChange(field.fieldName, event.target.value)}
                 />;
             case '3':
