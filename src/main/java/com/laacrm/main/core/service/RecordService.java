@@ -2,10 +2,10 @@ package com.laacrm.main.core.service;
 
 import com.laacrm.main.core.FeatureLimits;
 import com.laacrm.main.core.controller.APIException;
-import com.laacrm.main.core.entity.Field;
-import com.laacrm.main.core.entity.Layout;
+import com.laacrm.main.core.entity.*;
 import com.laacrm.main.core.entity.Module;
 import com.laacrm.main.core.entity.Record;
+import com.laacrm.main.core.repo.FieldPropertiesRefRepo;
 import com.laacrm.main.core.xml.XmlUtils;
 import com.laacrm.main.framework.service.tenant.TenantService;
 import jakarta.persistence.EntityManager;
@@ -42,6 +42,7 @@ public class RecordService {
     private final FeatureLimits featureLimits;
     private final ModuleService moduleService;
     private final TenantService tenantService;
+    private final FieldPropertiesRefRepo fieldPropertiesRefRepo;
 
     public void createRecordTables() {
         Document initData = XmlUtils.loadXmlDocument("src/main/java/com/laacrm/main/core/xml/PopulateInitialData.xml");
@@ -93,6 +94,7 @@ public class RecordService {
         List<Field> fields = layout.getFields().stream()
                 .filter(f -> recordDetails.containsKey(f.getFieldName()))
                 .toList();
+        validateFields(recordDetails, layout.getFields());
         if(fields.isEmpty()){
             throw new APIException(HttpStatus.BAD_REQUEST.value(), "Fields cannot be empty");
         }
@@ -205,6 +207,33 @@ public class RecordService {
         }
         return recordDetails;
     }
+
+    private void validateFields(Map<String, Object> recordDetails, List<Field> fields) {
+        for (Field field : fields) {
+            List<FieldProperties> fieldProperties = field.getFieldProperties();
+            List<FieldPropertiesRef> fieldPropertiesRefs = fieldPropertiesRefRepo.findByFieldType(field.getFieldType());
+            for (FieldPropertiesRef propRef : fieldPropertiesRefs) {
+                FieldProperties fieldProp = fieldProperties.stream().filter(fld -> fld.getProperty().getPropertyName().equals(propRef.getPropertyName())).findFirst().orElse(null);
+                if(fieldProp == null){
+                    throw new APIException(HttpStatus.BAD_REQUEST.value(), "Field Prop not found");
+                }
+                if(propRef.getPropertyName().equals("isMandatory")){
+                    boolean isMandatory = Boolean.parseBoolean(fieldProp.getPropertyValue());
+                    if(isMandatory && recordDetails.get(field.getFieldName()) == null) {
+                        throw new APIException(HttpStatus.BAD_REQUEST.value(), "Mandatory Field Value not found");
+                    }
+                }
+                if(propRef.getPropertyName().equals("maxChar")){
+                    int maxChar = Integer.parseInt(fieldProp.getPropertyValue());
+                    Object recordValue = recordDetails.get(field.getFieldName());
+                    if(recordValue != null && recordValue.toString().length() > maxChar){
+                        throw new APIException(HttpStatus.BAD_REQUEST.value(), "Max Character Value Exceeded");
+                    }
+                }
+            }
+        }
+    }
+
 
     public void deleteRecordById(Long moduleId, Long recordId) {
         Module module = moduleService.findById(moduleId);

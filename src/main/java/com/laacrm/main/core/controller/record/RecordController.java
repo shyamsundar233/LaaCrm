@@ -49,6 +49,8 @@ public class RecordController extends APIController {
     @PostMapping("{moduleId}/record")
     public ResponseEntity<APIResponse> saveRecord(@RequestBody RecordDTO recordDTO){
         Record record = getRecordEntityFromDTO(recordDTO);
+        record.setCreatedAt(LocalDateTime.now());
+        record.setUpdatedAt(LocalDateTime.now());
         record = recordService.saveRecord(record);
         Map<String, Object> details = new HashMap<>();
         details.put("recordId", record.getRecordId().toString());
@@ -59,6 +61,7 @@ public class RecordController extends APIController {
     @PutMapping("/{moduleId}/record")
     public ResponseEntity<APIResponse> updateRecord(@RequestBody RecordDTO recordDTO){
         Record record = getRecordEntityFromDTO(recordDTO);
+        record.setUpdatedAt(LocalDateTime.now());
         record = recordService.saveRecord(record);
         Map<String, Object> details = new HashMap<>();
         details.put("recordId", record.getRecordId().toString());
@@ -80,8 +83,6 @@ public class RecordController extends APIController {
                 recordDTO.getRecordId() != null && !recordDTO.getRecordId().isEmpty() ? Long.valueOf(recordDTO.getRecordId()) : null,
                 recordDTO.getModuleId() != null && !recordDTO.getModuleId().isEmpty() ? Long.valueOf(recordDTO.getModuleId()) : null,
                 recordDTO.getLayoutId() != null && !recordDTO.getLayoutId().isEmpty() ? Long.valueOf(recordDTO.getLayoutId()) : null,
-                LocalDateTime.parse(recordDTO.getCreatedAt()),
-                LocalDateTime.parse(recordDTO.getUpdatedAt()),
                 recordDTO.getRecordDetails()
         );
     }

@@ -16,10 +16,17 @@ const App = () => {
             MuiButton: {
                 styleOverrides: {
                     root: {
-                        backgroundColor: "#03346E",
-                        "&.MuiButtonBase-root": {
+                        "&.MuiButton-contained": {
+                            backgroundColor: "#03346E",
                             "&:hover": {
                                 backgroundColor: "rgba(3,52,110,0.81)"
+                            }
+                        },
+                        "&.MuiButton-outlined": {
+                            borderColor: "#03346E",
+                            color: "#03346E",
+                            "&:hover": {
+                                backgroundColor: "rgba(3,52,110,0.13)"
                             }
                         }
                     }
@@ -32,6 +39,16 @@ const App = () => {
                             height: "1px",
                             fontSize: "15px",
                             padding: "20px"
+                        }
+                    }
+                }
+            },
+            MuiSelect: {
+                styleOverrides: {
+                    root: {
+                        "& .MuiSelect-outlined": {
+                            height: "1px",
+                            padding: "10px"
                         }
                     }
                 }

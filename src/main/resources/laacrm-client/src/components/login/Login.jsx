@@ -40,6 +40,8 @@ const Login = ({operation}) => {
                 apiEngine.requestHelper("GET", "/v1/api/initPopulate").then(() => {
                     navigate("/app/dashboard");
                 })
+            }else {
+                navigate("/app/dashboard");
             }
         })
     }

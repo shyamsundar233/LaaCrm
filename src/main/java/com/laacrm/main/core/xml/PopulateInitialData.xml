@@ -42,7 +42,7 @@
                 <Field field-name="Lead Status" field-type="4">
                     <FieldProperties property="isMandatory" property-value="false" />
                     <FieldProperties property="options" property-value="['Attempted to Contact', 'Contact in Future', 'Contacted', 'Junk Lead', 'Not Contacted']" />
-                    <FieldProperties property="defValue" property-value="Advertisement" />
+                    <FieldProperties property="defValue" property-value="Attempted to Contact" />
                 </Field>
             </Layout>
         </Module>
