@@ -78,7 +78,7 @@ const RecordList = () => {
                                 <Button variant={`contained`} className={`me-2`} onClick={() => navigate(`/app/module/${moduleName}/create`)}>Create {module.singularName}</Button>
                             </Box>
                         </Box>
-                        <Paper className={`mt-3`} sx={{ height: 650, width: '100%' }}>
+                        <Paper className={`mt-3`} sx={{ height: "80vh", width: '100%' }}>
                             <DataGrid
                                 columns={columns}
                                 columnVisibilityModel={columnVisibility}
