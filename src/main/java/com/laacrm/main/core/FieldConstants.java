@@ -14,7 +14,14 @@ public class FieldConstants {
         MULTI_LINE("multi_line", 2),
         NUMBER("number", 3),
         DROPDOWN("dropdown", 4),
-        CHECKBOX("checkbox", 5);
+        CHECKBOX("checkbox", 5),
+        DEFAULT_NAME("default_name", 6),
+        DEFAULT_OWNER("default_owner", 7),
+        EMAIL("email", 8),
+        PHONE("phone", 9),
+        URL("url", 10),
+        DATE("date", 11),
+        CURRENCY("currency", 12);
 
         private final String name;
         private final Integer value;

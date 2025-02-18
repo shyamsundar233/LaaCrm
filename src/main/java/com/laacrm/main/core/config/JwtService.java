@@ -1,11 +1,14 @@
 package com.laacrm.main.core.config;
 
+import com.laacrm.main.core.controller.APIException;
+import com.laacrm.main.framework.entities.Users;
 import io.jsonwebtoken.Claims;
 import io.jsonwebtoken.Jwts;
 import io.jsonwebtoken.SignatureAlgorithm;
 import io.jsonwebtoken.io.Decoders;
 import io.jsonwebtoken.security.Keys;
 import org.springframework.beans.factory.annotation.Value;
+import org.springframework.http.HttpStatus;
 import org.springframework.security.core.userdetails.UserDetails;
 import org.springframework.stereotype.Service;
 
@@ -33,6 +36,14 @@ public class JwtService {
         return extractClaim(token, Claims::getSubject);
     }
 
+    private Long extractUserId(String token) {
+        return Jwts.parser()
+                .setSigningKey(secretKey)
+                .parseClaimsJws(token)
+                .getBody()
+                .get("userId", Long.class);
+    }
+
     /**
      *
      * @param token
@@ -50,8 +61,8 @@ public class JwtService {
      * @param userDetails
      * @return
      */
-    public String generateToken(UserDetails userDetails) {
-        return generateToken(new HashMap<>(), userDetails);
+    public String generateToken(UserDetails userDetails, Long userId) {
+        return generateToken(new HashMap<>(), userDetails, userId);
     }
 
     /**
@@ -60,8 +71,8 @@ public class JwtService {
      * @param userDetails
      * @return
      */
-    public String generateToken(Map<String, Object> extraClaims, UserDetails userDetails) {
-        return buildToken(extraClaims, userDetails, jwtExpiration);
+    public String generateToken(Map<String, Object> extraClaims, UserDetails userDetails, Long userId) {
+        return buildToken(extraClaims, userDetails, jwtExpiration, userId);
     }
 
     /**
@@ -82,11 +93,13 @@ public class JwtService {
     private String buildToken(
             Map<String, Object> extraClaims,
             UserDetails userDetails,
-            long expiration
+            long expiration,
+            Long userId
     ) {
         return Jwts
                 .builder()
                 .setClaims(extraClaims)
+                .claim("userId", userId)
                 .setSubject(userDetails.getUsername())
                 .setIssuedAt(new Date(System.currentTimeMillis()))
                 .setExpiration(new Date(System.currentTimeMillis() + expiration))
@@ -101,8 +114,15 @@ public class JwtService {
      * @return
      */
     public boolean isTokenValid(String token, UserDetails userDetails) {
-        final String username = extractUsername(token);
-        return (username.equals(userDetails.getUsername())) && !isTokenExpired(token);
+        try{
+            final String username = extractUsername(token);
+            final Long userId = extractUserId(token);
+            return username.equals(userDetails.getUsername()) &&
+                    userId.equals(((Users) userDetails).getUserId()) &&
+                    !isTokenExpired(token);
+        }catch (Exception e){
+            throw new APIException(HttpStatus.UNAUTHORIZED.value(), "Invalid token");
+        }
     }
 
     /**

@@ -2,13 +2,38 @@
     <DefaultFieldProps>
         <DefaultFieldProp property-name="isMandatory" display-name="Is Mandatory" field-type="1" mandatory="false"/>
         <DefaultFieldProp property-name="maxChar" display-name="Maximum Characters Allowed" field-type="1" mandatory="false"/>
+
         <DefaultFieldProp property-name="isMandatory" display-name="Is Mandatory" field-type="2" mandatory="false"/>
         <DefaultFieldProp property-name="maxChar" display-name="Maximum Characters Allowed" field-type="2" mandatory="false"/>
+
         <DefaultFieldProp property-name="isMandatory" display-name="Is Mandatory" field-type="3" mandatory="false"/>
         <DefaultFieldProp property-name="maxChar" display-name="Maximum Characters Allowed" field-type="3" mandatory="false"/>
+
         <DefaultFieldProp property-name="isMandatory" display-name="Is Mandatory" field-type="4" mandatory="false"/>
+        <DefaultFieldProp property-name="options" display-name="Options" field-type="4" mandatory="false"/>
         <DefaultFieldProp property-name="defValue" display-name="Default Value" field-type="4" mandatory="false"/>
+
         <DefaultFieldProp property-name="isMandatory" display-name="Is Mandatory" field-type="5" mandatory="false"/>
         <DefaultFieldProp property-name="defValue" display-name="Default Value" field-type="5" mandatory="false"/>
+
+        <DefaultFieldProp property-name="isMandatory" display-name="Is Mandatory" field-type="6" mandatory="false"/>
+        <DefaultFieldProp property-name="maxChar" display-name="Maximum Characters Allowed" field-type="6" mandatory="false"/>
+
+        <DefaultFieldProp property-name="isMandatory" display-name="Is Mandatory" field-type="7" mandatory="false"/>
+        <DefaultFieldProp property-name="maxChar" display-name="Maximum Characters Allowed" field-type="7" mandatory="false"/>
+
+        <DefaultFieldProp property-name="isMandatory" display-name="Is Mandatory" field-type="8" mandatory="false"/>
+        <DefaultFieldProp property-name="maxChar" display-name="Maximum Characters Allowed" field-type="8" mandatory="false"/>
+
+        <DefaultFieldProp property-name="isMandatory" display-name="Is Mandatory" field-type="9" mandatory="false"/>
+        <DefaultFieldProp property-name="maxChar" display-name="Maximum Characters Allowed" field-type="9" mandatory="false"/>
+
+        <DefaultFieldProp property-name="isMandatory" display-name="Is Mandatory" field-type="10" mandatory="false"/>
+        <DefaultFieldProp property-name="maxChar" display-name="Maximum Characters Allowed" field-type="10" mandatory="false"/>
+
+        <DefaultFieldProp property-name="isMandatory" display-name="Is Mandatory" field-type="11" mandatory="false"/>
+
+        <DefaultFieldProp property-name="isMandatory" display-name="Is Mandatory" field-type="12" mandatory="false"/>
+        <DefaultFieldProp property-name="maxChar" display-name="Maximum Characters Allowed" field-type="12" mandatory="false"/>
     </DefaultFieldProps>
 </TemplateData>

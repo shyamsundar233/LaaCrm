@@ -1,0 +1,38 @@
+.app-parent-cont {
+    margin: 0 0 0 0 !important;
+    padding: 0 0 0 0 !important;
+}
+
+.outlet-parent-cont {
+    margin-top: 20px;
+    height: 90vh;
+    margin-left: 20px !important;
+    box-shadow: rgba(100, 100, 111, 0.2) 0px 7px 29px 0px;
+    border-radius: 10px;
+    width: 100%;
+}
+
+.d-flex-j-center {
+    display: flex;
+    justify-content: center;
+}
+
+.d-flex-a-center {
+    display: flex;
+    align-items: center;
+}
+
+.d-flex-j-center-a-center {
+    display: flex;
+    justify-content: center;
+    align-items: center;
+}
+
+.pointer {
+    cursor: pointer;
+}
+
+.heading-1 {
+    font-size: 1.5rem !important;
+    font-weight: 700 !important;
+}

@@ -2,50 +2,279 @@
     <SystemModules>
         <Module module-name="Leads" singular-name="Lead" plural-name="Leads" type="1" status="1">
             <Layout layout-name="Standard" is-default="true">
-                <Field module="Leads" field-name="Lead Name" field-type="1">
-                    <FieldProperties field="Lead Name" property="isMandatory" property-value="true" />
-                    <FieldProperties field="Lead Name" property="maxChar" property-value="100" />
+                <Field field-name="Last Name" field-type="6">
+                    <FieldProperties property="isMandatory" property-value="true" />
+                    <FieldProperties property="maxChar" property-value="100" />
+                </Field>
+                <Field field-name="Lead Owner" field-type="7">
+                    <FieldProperties property="isMandatory" property-value="true" />
+                    <FieldProperties property="maxChar" property-value="100" />
+                </Field>
+                <Field field-name="First Name" field-type="1">
+                    <FieldProperties property="isMandatory" property-value="false" />
+                    <FieldProperties property="maxChar" property-value="100" />
+                </Field>
+                <Field field-name="Company" field-type="1">
+                    <FieldProperties property="isMandatory" property-value="true" />
+                    <FieldProperties property="maxChar" property-value="100" />
+                </Field>
+                <Field field-name="Title" field-type="1">
+                    <FieldProperties property="isMandatory" property-value="false" />
+                    <FieldProperties property="maxChar" property-value="100" />
+                </Field>
+                <Field field-name="Email" field-type="8">
+                    <FieldProperties property="isMandatory" property-value="false" />
+                    <FieldProperties property="maxChar" property-value="100" />
+                </Field>
+                <Field field-name="Mobile" field-type="9">
+                    <FieldProperties property="isMandatory" property-value="false" />
+                    <FieldProperties property="maxChar" property-value="100" />
+                </Field>
+                <Field field-name="Website" field-type="10">
+                    <FieldProperties property="isMandatory" property-value="false" />
+                    <FieldProperties property="maxChar" property-value="100" />
+                </Field>
+                <Field field-name="Lead Source" field-type="4">
+                    <FieldProperties property="isMandatory" property-value="false" />
+                    <FieldProperties property="options" property-value="['Advertisement', 'Cold Call', 'Employee Referral', 'External Referral', 'Online Store']" />
+                    <FieldProperties property="defValue" property-value="Advertisement" />
+                </Field>
+                <Field field-name="Lead Status" field-type="4">
+                    <FieldProperties property="isMandatory" property-value="false" />
+                    <FieldProperties property="options" property-value="['Attempted to Contact', 'Contact in Future', 'Contacted', 'Junk Lead', 'Not Contacted']" />
+                    <FieldProperties property="defValue" property-value="Attempted to Contact" />
                 </Field>
             </Layout>
         </Module>
         <Module module-name="Contacts" singular-name="Contact" plural-name="Contacts" type="1" status="1">
             <Layout layout-name="Standard" is-default="true">
-                <Field module="Contacts" field-name="Contact Name" field-type="1">
-                <FieldProperties field="Contact Name" property="isMandatory" property-value="true" />
-                <FieldProperties field="Contact Name" property="maxChar" property-value="100" />
-            </Field>
+                <Field field-name="Last Name" field-type="6">
+                    <FieldProperties property="isMandatory" property-value="true" />
+                    <FieldProperties property="maxChar" property-value="100" />
+                </Field>
+                <Field field-name="Contact Owner" field-type="7">
+                    <FieldProperties property="isMandatory" property-value="true" />
+                    <FieldProperties property="maxChar" property-value="100" />
+                </Field>
+                <Field field-name="First Name" field-type="1">
+                    <FieldProperties property="isMandatory" property-value="false" />
+                    <FieldProperties property="maxChar" property-value="100" />
+                </Field>
+                <Field field-name="Lead Source" field-type="4">
+                    <FieldProperties property="isMandatory" property-value="false" />
+                    <FieldProperties property="options" property-value="['Advertisement', 'Cold Call', 'Employee Referral', 'External Referral', 'Online Store']" />
+                    <FieldProperties property="defValue" property-value="Advertisement" />
+                </Field>
+                <Field field-name="Email" field-type="8">
+                    <FieldProperties property="isMandatory" property-value="false" />
+                    <FieldProperties property="maxChar" property-value="100" />
+                </Field>
+                <Field field-name="Mobile" field-type="9">
+                    <FieldProperties property="isMandatory" property-value="false" />
+                    <FieldProperties property="maxChar" property-value="100" />
+                </Field>
+                <Field field-name="Title" field-type="1">
+                    <FieldProperties property="isMandatory" property-value="false" />
+                    <FieldProperties property="maxChar" property-value="100" />
+                </Field>
+                <Field field-name="Department" field-type="1">
+                    <FieldProperties property="isMandatory" property-value="false" />
+                    <FieldProperties property="maxChar" property-value="100" />
+                </Field>
+                <Field field-name="Date of Birth" field-type="11">
+                    <FieldProperties property="isMandatory" property-value="false" />
+                </Field>
+                <Field field-name="Secondary Email" field-type="8">
+                    <FieldProperties property="isMandatory" property-value="false" />
+                    <FieldProperties property="maxChar" property-value="100" />
+                </Field>
             </Layout>
         </Module>
         <Module module-name="Accounts" singular-name="Account" plural-name="Accounts" type="1" status="1">
             <Layout layout-name="Standard" is-default="true">
-                <Field module="Accounts" field-name="Account Name" field-type="1">
-                <FieldProperties field="Account Name" property="isMandatory" property-value="true" />
-                <FieldProperties field="Account Name" property="maxChar" property-value="100" />
-            </Field>
+                <Field field-name="Account Name" field-type="6">
+                    <FieldProperties property="isMandatory" property-value="true" />
+                    <FieldProperties property="maxChar" property-value="100" />
+                </Field>
+                <Field field-name="Account Owner" field-type="7">
+                    <FieldProperties property="isMandatory" property-value="true" />
+                    <FieldProperties property="maxChar" property-value="100" />
+                </Field>
+                <Field field-name="Rating" field-type="4">
+                    <FieldProperties property="isMandatory" property-value="false" />
+                    <FieldProperties property="options" property-value="['Acquired', 'Active', 'Market Failed', 'Project Cancelled', 'Shut Down']" />
+                    <FieldProperties property="defValue" property-value="Acquired" />
+                </Field>
+                <Field field-name="Mobile" field-type="9">
+                    <FieldProperties property="isMandatory" property-value="false" />
+                    <FieldProperties property="maxChar" property-value="100" />
+                </Field>
+                <Field field-name="Account Site" field-type="1">
+                    <FieldProperties property="isMandatory" property-value="false" />
+                    <FieldProperties property="maxChar" property-value="100" />
+                </Field>
+                <Field field-name="Website" field-type="10">
+                    <FieldProperties property="isMandatory" property-value="false" />
+                    <FieldProperties property="maxChar" property-value="100" />
+                </Field>
+                <Field field-name="Account Number" field-type="3">
+                    <FieldProperties property="isMandatory" property-value="false" />
+                    <FieldProperties property="maxChar" property-value="100" />
+                </Field>
+                <Field field-name="Employees" field-type="3">
+                    <FieldProperties property="isMandatory" property-value="false" />
+                    <FieldProperties property="maxChar" property-value="100" />
+                </Field>
+                <Field field-name="Billing State" field-type="1">
+                    <FieldProperties property="isMandatory" property-value="false" />
+                    <FieldProperties property="maxChar" property-value="100" />
+                </Field>
+                <Field field-name="Shipping State" field-type="1">
+                    <FieldProperties property="isMandatory" property-value="false" />
+                    <FieldProperties property="maxChar" property-value="100" />
+                </Field>
+                <Field field-name="Billing Country" field-type="1">
+                    <FieldProperties property="isMandatory" property-value="false" />
+                    <FieldProperties property="maxChar" property-value="100" />
+                </Field>
+                <Field field-name="Shipping Country" field-type="1">
+                    <FieldProperties property="isMandatory" property-value="false" />
+                    <FieldProperties property="maxChar" property-value="100" />
+                </Field>
             </Layout>
         </Module>
         <Module module-name="Vendors" singular-name="Vendor" plural-name="Vendors" type="1" status="1">
             <Layout layout-name="Standard" is-default="true">
-                <Field module="Vendors" field-name="Vendor Name" field-type="1">
-                <FieldProperties field="Vendor Name" property="isMandatory" property-value="true" />
-                <FieldProperties field="Vendor Name" property="maxChar" property-value="100" />
-            </Field>
+                <Field field-name="Vendor Name" field-type="6">
+                    <FieldProperties property="isMandatory" property-value="true" />
+                    <FieldProperties property="maxChar" property-value="100" />
+                </Field>
+                <Field field-name="Vendor Owner" field-type="7">
+                    <FieldProperties property="isMandatory" property-value="true" />
+                    <FieldProperties property="maxChar" property-value="100" />
+                </Field>
+                <Field field-name="Mobile" field-type="9">
+                    <FieldProperties property="isMandatory" property-value="false" />
+                    <FieldProperties property="maxChar" property-value="100" />
+                </Field>
+                <Field field-name="Email" field-type="8">
+                    <FieldProperties property="isMandatory" property-value="false" />
+                    <FieldProperties property="maxChar" property-value="100" />
+                </Field>
+                <Field field-name="Website" field-type="10">
+                    <FieldProperties property="isMandatory" property-value="false" />
+                    <FieldProperties property="maxChar" property-value="100" />
+                </Field>
+                <Field field-name="GL Account" field-type="4">
+                    <FieldProperties property="isMandatory" property-value="false" />
+                    <FieldProperties property="options" property-value="['Sales-Software', 'Sales-Hardware', 'Rental Income', 'Interest Income', 'Sales Software Support']" />
+                    <FieldProperties property="defValue" property-value="Sales-Software" />
+                </Field>
+                <Field field-name="Category" field-type="1">
+                    <FieldProperties property="isMandatory" property-value="false" />
+                    <FieldProperties property="maxChar" property-value="100" />
+                </Field>
+                <Field field-name="Created By" field-type="1">
+                    <FieldProperties property="isMandatory" property-value="false" />
+                    <FieldProperties property="maxChar" property-value="100" />
+                </Field>
+                <Field field-name="State" field-type="1">
+                    <FieldProperties property="isMandatory" property-value="false" />
+                    <FieldProperties property="maxChar" property-value="100" />
+                </Field>
+                <Field field-name="Country" field-type="1">
+                    <FieldProperties property="isMandatory" property-value="false" />
+                    <FieldProperties property="maxChar" property-value="100" />
+                </Field>
             </Layout>
         </Module>
         <Module module-name="Products" singular-name="Product" plural-name="Products" type="1" status="1">
             <Layout layout-name="Standard" is-default="true">
-                <Field module="Products" field-name="Product Name" field-type="1">
-                <FieldProperties field="Product Name" property="isMandatory" property-value="true" />
-                <FieldProperties field="Product Name" property="maxChar" property-value="100" />
-            </Field>
+                <Field field-name="Product Name" field-type="6">
+                    <FieldProperties property="isMandatory" property-value="true" />
+                    <FieldProperties property="maxChar" property-value="100" />
+                </Field>
+                <Field field-name="Product Owner" field-type="7">
+                    <FieldProperties property="isMandatory" property-value="true" />
+                    <FieldProperties property="maxChar" property-value="100" />
+                </Field>
+                <Field field-name="Product Code" field-type="1">
+                    <FieldProperties property="isMandatory" property-value="false" />
+                    <FieldProperties property="maxChar" property-value="100" />
+                </Field>
+                <Field field-name="Manufacturer" field-type="4">
+                    <FieldProperties property="isMandatory" property-value="false" />
+                    <FieldProperties property="options" property-value="['AltvetPet Inc.', 'LexPon Inc.', 'MetBeat Corp.']" />
+                    <FieldProperties property="defValue" property-value="MetBeat Corp." />
+                </Field>
+                <Field field-name="Product Active" field-type="5">
+                    <FieldProperties property="isMandatory" property-value="false" />
+                    <FieldProperties property="defValue" property-value="false" />
+                </Field>
+                <Field field-name="Created By" field-type="1">
+                    <FieldProperties property="isMandatory" property-value="false" />
+                    <FieldProperties property="maxChar" property-value="100" />
+                </Field>
+                <Field field-name="Sales Start Date" field-type="11">
+                    <FieldProperties property="isMandatory" property-value="false" />
+                </Field>
+                <Field field-name="Support Start Date" field-type="11">
+                    <FieldProperties property="isMandatory" property-value="false" />
+                </Field>
+                <Field field-name="Sales End Date" field-type="11">
+                    <FieldProperties property="isMandatory" property-value="false" />
+                </Field>
+                <Field field-name="Support End Date" field-type="11">
+                    <FieldProperties property="isMandatory" property-value="false" />
+                </Field>
+                <Field field-name="Unit Price" field-type="12">
+                    <FieldProperties property="isMandatory" property-value="false" />
+                    <FieldProperties property="maxChar" property-value="100" />
+                </Field>
             </Layout>
         </Module>
         <Module module-name="Sales" singular-name="Sale" plural-name="Sales" type="1" status="1">
             <Layout layout-name="Standard" is-default="true">
-                <Field module="Sales" field-name="Sale Name" field-type="1">
-                <FieldProperties field="Sale Name" property="isMandatory" property-value="true" />
-                <FieldProperties field="Sale Name" property="maxChar" property-value="100" />
-            </Field>
+                <Field field-name="Subject" field-type="6">
+                    <FieldProperties property="isMandatory" property-value="true" />
+                    <FieldProperties property="maxChar" property-value="100" />
+                </Field>
+                <Field field-name="Sale Owner" field-type="7">
+                    <FieldProperties property="isMandatory" property-value="true" />
+                    <FieldProperties property="maxChar" property-value="100" />
+                </Field>
+                <Field field-name="SO Number" field-type="3">
+                    <FieldProperties property="isMandatory" property-value="false" />
+                    <FieldProperties property="maxChar" property-value="100" />
+                </Field>
+                <Field field-name="Customer No" field-type="1">
+                    <FieldProperties property="isMandatory" property-value="false" />
+                    <FieldProperties property="maxChar" property-value="100" />
+                </Field>
+                <Field field-name="Purchase Order" field-type="1">
+                    <FieldProperties property="isMandatory" property-value="false" />
+                    <FieldProperties property="maxChar" property-value="100" />
+                </Field>
+                <Field field-name="Pending" field-type="1">
+                    <FieldProperties property="isMandatory" property-value="false" />
+                    <FieldProperties property="maxChar" property-value="100" />
+                </Field>
+                <Field field-name="Carrier" field-type="4">
+                    <FieldProperties property="isMandatory" property-value="false" />
+                    <FieldProperties property="options" property-value="['FedEX', 'UPS', 'USPS', 'DHL', 'BlueDart']" />
+                    <FieldProperties property="defValue" property-value="FedEX" />
+                </Field>
+                <Field field-name="Excise Duty" field-type="12">
+                    <FieldProperties property="isMandatory" property-value="false" />
+                    <FieldProperties property="maxChar" property-value="100" />
+                </Field>
+                <Field field-name="Due Date" field-type="11">
+                    <FieldProperties property="isMandatory" property-value="false" />
+                </Field>
+                <Field field-name="Created By" field-type="1">
+                    <FieldProperties property="isMandatory" property-value="false" />
+                    <FieldProperties property="maxChar" property-value="100" />
+                </Field>
             </Layout>
         </Module>
     </SystemModules>

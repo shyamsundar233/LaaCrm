@@ -22,20 +22,16 @@ public class Record {
 
     public Record() {}
 
-    public Record(Long moduleId, Long layoutId, LocalDateTime createdAt, LocalDateTime updatedAt, Map<String, Object> recordDetails) {
+    public Record(Long moduleId, Long layoutId, Map<String, Object> recordDetails) {
         this.moduleId = moduleId;
         this.layoutId = layoutId;
-        this.createdAt = createdAt;
-        this.updatedAt = updatedAt;
         this.recordDetails = recordDetails;
     }
 
-    public Record(Long recordId, Long moduleId, Long layoutId, LocalDateTime createdAt, LocalDateTime updatedAt, Map<String, Object> recordDetails) {
+    public Record(Long recordId, Long moduleId, Long layoutId, Map<String, Object> recordDetails) {
         this.recordId = recordId;
         this.moduleId = moduleId;
         this.layoutId = layoutId;
-        this.createdAt = createdAt;
-        this.updatedAt = updatedAt;
         this.recordDetails = recordDetails;
     }
 }

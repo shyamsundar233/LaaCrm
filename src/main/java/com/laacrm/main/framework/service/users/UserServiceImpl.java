@@ -1,5 +1,7 @@
 package com.laacrm.main.framework.service.users;
 
+import com.laacrm.main.core.config.JwtService;
+import com.laacrm.main.core.controller.APIException;
 import com.laacrm.main.framework.entities.Tenant;
 import com.laacrm.main.framework.entities.Users;
 import com.laacrm.main.framework.exception.FrameworkException;
@@ -11,6 +13,8 @@ import lombok.AllArgsConstructor;
 import org.springframework.http.HttpStatus;
 import org.springframework.security.authentication.AuthenticationManager;
 import org.springframework.security.authentication.UsernamePasswordAuthenticationToken;
+import org.springframework.security.core.userdetails.UserDetails;
+import org.springframework.security.core.userdetails.UserDetailsService;
 import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.stereotype.Service;
 
@@ -30,6 +34,8 @@ public class UserServiceImpl implements UserService {
     private final TenantService tenantService;
     private final AuthenticationManager authenticationManager;
     private final PasswordEncoder passwordEncoder;
+    private final UserDetailsService userDetailsService;
+    private final JwtService jwtService;
 
     @Override
     public List<UserDTO> getAllUsers() {
@@ -93,6 +99,14 @@ public class UserServiceImpl implements UserService {
         }
     }
 
+    @Override
+    public void authenticateToken(String token, String username) {
+        UserDetails userDetails = this.userDetailsService.loadUserByUsername(username);
+        if(!jwtService.isTokenValid(token, userDetails)) {
+            throw new APIException(HttpStatus.UNAUTHORIZED.value(), "Token is invalid");
+        }
+    }
+
     private void createUserValidation(UserDTO userDetails) {
         LOGGER.log(Level.INFO, "==========> User Creation Validation Starts <==========");
         int exceptionCode = -1;
@@ -102,8 +116,6 @@ public class UserServiceImpl implements UserService {
         exceptionCode = exceptionCode == -1 && userDetails.getPassword().isEmpty() ? 4 : exceptionCode;
         exceptionCode = exceptionCode == -1 && userDetails.getEmail() == null ? 5 : exceptionCode;
         exceptionCode = exceptionCode == -1 && userDetails.getEmail().isEmpty() ? 6 : exceptionCode;
-        exceptionCode = exceptionCode == -1 && userDetails.getPhone() == null ? 7 : exceptionCode;
-        exceptionCode = exceptionCode == -1 && userDetails.getPhone().isEmpty() ? 8 : exceptionCode;
         exceptionCode = exceptionCode == -1 && userDetails.getFirstName() == null ? 9 : exceptionCode;
         exceptionCode = exceptionCode == -1 && userDetails.getFirstName().isEmpty() ? 10 : exceptionCode;
         exceptionCode = exceptionCode == -1 && userDetails.getLastName() == null ? 11 : exceptionCode;
@@ -119,8 +131,6 @@ public class UserServiceImpl implements UserService {
                 case 4 -> "Password cannot be empty";
                 case 5 -> "Email cannot be null";
                 case 6 -> "Email cannot be empty";
-                case 7 -> "Phone cannot be null";
-                case 8 -> "Phone cannot be empty";
                 case 9 -> "First Name cannot be null";
                 case 10 -> "First Name cannot be empty";
                 case 11 -> "Last Name cannot be null";

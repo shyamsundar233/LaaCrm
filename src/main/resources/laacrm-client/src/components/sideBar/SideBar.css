@@ -1,0 +1,28 @@
+.side-bar-parent-cont {
+    width: 300px !important;
+    box-shadow: rgba(100, 100, 111, 0.2) 0px 7px 29px 0px;
+    margin-top: 20px;
+    height: 90vh;
+    border-radius: 10px;
+}
+
+.mod-elem {}
+
+.mod-elem:hover {
+    background-color: rgba(3, 52, 110, 0.82);
+    border: none;
+    color: white;
+    border-radius: 10px;
+}
+
+.mod-elem-active {
+    background-color: rgba(3, 52, 110, 0.82);
+    border: none;
+    color: white;
+    border-radius: 10px;
+}
+
+.mod-icon {
+    width: 25px;
+    margin-right: 10px;
+}

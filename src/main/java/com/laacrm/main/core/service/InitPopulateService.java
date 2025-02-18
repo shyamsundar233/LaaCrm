@@ -1,5 +1,6 @@
 package com.laacrm.main.core.service;
 
+import com.laacrm.main.core.TaskRecordConstants;
 import com.laacrm.main.core.entity.*;
 import com.laacrm.main.core.entity.Module;
 import com.laacrm.main.core.xml.XmlUtils;
@@ -24,10 +25,21 @@ public class InitPopulateService {
     private static final Logger LOGGER = Logger.getLogger(InitPopulateService.class.getName());
 
     private final ModuleService moduleService;
+    private final TaskRecordService taskRecordService;
+
+    public boolean isInitialized() {
+        TaskRecord taskRecord = taskRecordService.findAll("initPopulateTask").stream().findFirst().orElse(null);
+        return taskRecord != null;
+    }
 
     public void populate() {
-        LOGGER.log(Level.INFO, "Populating default data to CRM :: {0}", AuthThreadLocal.getCurrentTenant().getTenantId());
-        populateDefaultModules();
+        TaskRecord taskRecord = taskRecordService.findAll("initPopulateTask").stream().findFirst().orElse(null);
+        if (taskRecord == null) {
+            LOGGER.log(Level.INFO, "Populating default data to CRM :: {0}", AuthThreadLocal.getCurrentTenant().getTenantId());
+            populateDefaultModules();
+        }else {
+            LOGGER.log(Level.INFO, "Default data to CRM already populated :: {0}", AuthThreadLocal.getCurrentTenant().getTenantId());
+        }
     }
 
     private void populateDefaultModules() {
@@ -85,7 +97,9 @@ public class InitPopulateService {
                 moduleService.save(module);
                 LOGGER.log(Level.INFO, "{0} Default Module populated", module.getModuleName());
             }
+            taskRecordService.addTaskRecord("initPopulateTask", "initPopulateTask", TaskRecordConstants.TaskStatus.SUCCESS);
         }catch (Exception e) {
+            taskRecordService.addTaskRecord("initPopulateTask", "initPopulateTask", TaskRecordConstants.TaskStatus.FAILURE);
             LOGGER.log(Level.SEVERE, "Error while populating default modules :: {0}", e.getMessage());
             throw new RuntimeException(e);
         }
