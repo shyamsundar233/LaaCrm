@@ -162,6 +162,7 @@ public class ModuleController extends APIController {
                 String.valueOf(field.getModule().getModuleId()),
                 field.getFieldName(),
                 String.valueOf(field.getFieldType()),
+                field.getIsVisible() == null ? "false" : String.valueOf(field.getIsVisible()),
                 fieldPropertiesList
         );
     }

@@ -88,7 +88,7 @@ const RecordCreate = () => {
                     <Box className={`d-flex`}>
                         <Typography className={`heading-1`}>Create {module.singularName} - {layout.layoutName}</Typography>
                         <Box className={`ms-auto me-3`}>
-                            <Button variant={`outlined`} className={`me-2`} onClick={() => navigate(`/app/module/${moduleName}/banner`)}>Cancel</Button>
+                            <Button variant={`outlined`} className={`me-2`} onClick={() => navigate(`/app/module/${moduleName}/list`)}>Cancel</Button>
                             <Button variant={`contained`} onClick={onRecordCreate}>Create</Button>
                         </Box>
                     </Box>

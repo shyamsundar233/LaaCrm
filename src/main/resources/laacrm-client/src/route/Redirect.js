@@ -23,9 +23,9 @@ const Redirect = () => {
 
     const moduleHelper = () => {
         if(moduleName){
-            navigate(`/app/module/${moduleName}/banner`);
+            navigate(`/app/module/${moduleName}/list`);
         }else{
-            navigate(`/app/module/${modules[0].moduleName}/banner`);
+            navigate(`/app/module/${modules[0].moduleName}/list`);
         }
     }
 

@@ -36,7 +36,7 @@ const SideBar = () => {
 
     const handleActiveMod = (module) => {
         setActiveMod(module.moduleId);
-        navigate(`/app/module/${module.moduleName}/banner`);
+        navigate(`/app/module/${module.moduleName}/list`);
     }
 
     return (

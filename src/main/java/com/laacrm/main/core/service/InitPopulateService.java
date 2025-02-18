@@ -75,6 +75,7 @@ public class InitPopulateService {
                         );
                         fld.setModule(module);
                         fld.setLayout(modLayout);
+                        fld.setIsVisible(Boolean.parseBoolean(fldElement.getAttribute("is-visible")));
                         NodeList fldProps = fldElement.getElementsByTagName("FieldProperties");
                         List<FieldProperties> fldPropsList = new ArrayList<>();
                         for (int propIndex = 0; propIndex < fldProps.getLength(); propIndex++) {

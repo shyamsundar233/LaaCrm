@@ -41,6 +41,8 @@ public class Field {
 
     private String recColName;
 
+    private Boolean isVisible = false;
+
     public Field() {}
 
     public Field(String fieldName, Integer fieldType, List<FieldProperties> fieldProperties) {
