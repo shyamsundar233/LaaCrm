@@ -6,6 +6,7 @@ import Login from "../components/login/Login";
 import Banner from "../components/module/banner/Banner";
 import RecordCreate from "../components/module/create/RecordCreatePage/RecordCreate";
 import Redirect from "./Redirect";
+import RecordList from "../components/module/RecordList/RecordList";
 
 const Router = () => {
     return (
@@ -31,6 +32,7 @@ const authRoutes = () => (
                     <Route exact path="create" element={<Redirect/>}>
                         <Route path=":layoutId" element={<RecordCreate/>} />
                     </Route>
+                    <Route path="list" element={<RecordList/>}/>
                 </Route>
             </Route>
         </Route>
