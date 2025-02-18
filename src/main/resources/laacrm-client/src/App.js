@@ -83,7 +83,9 @@ const App = () => {
                   <Title/>
                   <Container maxWidth="" className={`d-flex`}>
                       <SideBar/>
-                      <Outlet/>
+                      <Container maxWidth="" className={`outlet-parent-cont`}>
+                          <Outlet/>
+                      </Container>
                   </Container>
               </Container>
           )}

@@ -75,7 +75,7 @@ const RecordCreate = () => {
     }
 
     return (
-        <Container maxWidth="" className={`outlet-parent-cont`}>
+        <Container maxWidth="">
             {errorMessage &&
                 <Box className={`alert-pop-rec-create`}>
                     <Alert severity="error">{errorMessage}</Alert>
@@ -84,7 +84,7 @@ const RecordCreate = () => {
             {isLoading ? (
                 <Box>Loading....</Box>
             ) : (
-                <Box className={`p-4 mt-3`}>
+                <Box className={`p-1 mt-4`}>
                     <Box className={`d-flex`}>
                         <Typography className={`heading-1`}>Create {module.singularName} - {layout.layoutName}</Typography>
                         <Box className={`ms-auto me-3`}>

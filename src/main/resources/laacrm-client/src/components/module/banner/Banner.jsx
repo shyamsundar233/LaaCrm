@@ -33,7 +33,7 @@ const Banner = () => {
     },[moduleName, modules]);
 
     return (
-        <Container maxWidth="" className={`outlet-parent-cont`}>
+        <Container maxWidth="">
             {isLoading ? (
                 <Box>Loading...</Box>
             ) : (

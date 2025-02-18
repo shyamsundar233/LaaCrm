@@ -3,7 +3,7 @@ import {Container} from "@mui/material";
 
 const Dashboard = () => {
     return (
-        <Container maxWidth="" className={`outlet-parent-cont`}>
+        <Container maxWidth="">
             DashBoard
         </Container>
     )

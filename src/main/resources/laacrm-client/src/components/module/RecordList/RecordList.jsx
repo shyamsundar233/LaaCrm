@@ -17,6 +17,7 @@ const RecordList = () => {
     const [isLoading, setIsLoading] = useState(true);
     const [module, setModule] = useState("");
     const [columns, setColumns] = useState([]);
+    const [columnVisibility, setColumnVisibility] = useState({});
     const [rows, setRows] = useState([]);
     const [noRecords, setNoRecords] = useState(true);
 
@@ -28,8 +29,11 @@ const RecordList = () => {
         let fields = moduleObj.layouts[0].fields;
         for(let index in fields) {
             let field = fields[index];
-            if(field.isVisible === "true") {
-                columnsArr.push({field: field.fieldName, flex: 1})
+            columnsArr.push({field: field.fieldName, flex: 1});
+            if(field.isVisible !== "true"){
+                let obj = columnVisibility;
+                obj[field.fieldName] = false;
+                setColumnVisibility(obj);
             }
         }
         setColumns(columnsArr);
@@ -66,8 +70,8 @@ const RecordList = () => {
             return (<Banner/>)
         }else {
             return (
-                <Container maxWidth="" className={`outlet-parent-cont`}>
-                    <Box className={`p-4 mt-3`}>
+                <Container maxWidth="">
+                    <Box className={`p-1 mt-4`}>
                         <Box className={`d-flex`}>
                             <Typography className={`heading-1`}>All {module.pluralName}</Typography>
                             <Box className={`ms-auto me-3`}>
@@ -77,6 +81,7 @@ const RecordList = () => {
                         <Paper className={`mt-3`} sx={{ height: 650, width: '100%' }}>
                             <DataGrid
                                 columns={columns}
+                                columnVisibilityModel={columnVisibility}
                                 rows={rows}
                                 checkboxSelection
                                 sx={{ border: 0 }}
