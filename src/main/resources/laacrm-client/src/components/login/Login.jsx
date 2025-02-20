@@ -1,27 +1,10 @@
 import "./Login.css";
-import {Box, Button, Container, createTheme, Grid2, TextField, ThemeProvider, Link} from "@mui/material";
+import {Box, Button, Container, Grid2, TextField, Link, Alert} from "@mui/material";
 import {useEffect, useState} from "react";
 import axios from "axios";
 import authService from "../../api/authService";
 import {useNavigate} from "react-router-dom";
 import apiEngine from "../../api/apiEngine";
-
-const loginFieldsTheme = createTheme({
-    components: {
-        MuiTextField: {
-            styleOverrides: {
-                root: {
-                    "& .MuiInputLabel-root": {
-                        color: "white"
-                    },
-                    "& .MuiFocused": {
-                        color: "white"
-                    }
-                }
-            }
-        }
-    }
-});
 
 const Login = ({operation}) => {
 
@@ -32,6 +15,13 @@ const Login = ({operation}) => {
     const [email, setEmail] = useState("");
     const [firstName, setFirstName] = useState("");
     const [lastName, setLastName] = useState("");
+    const [errorMessage, setErrorMessage] = useState("");
+
+    useEffect(() => {
+        setTimeout(() => {
+            setErrorMessage("");
+        }, 3000)
+    },[errorMessage]);
 
     const handleLogin = () => {
         axios.post("/v1/api/users/login", {username, password}).then(res => {
@@ -43,6 +33,15 @@ const Login = ({operation}) => {
             }else {
                 navigate("/app/dashboard");
             }
+        }).catch(err => {
+            let message;
+            let error = err.response.data.message;
+            switch (error){
+                case "Bad credentials":
+                    message = "Enter valid credentials !!!";
+                    break;
+            }
+            setErrorMessage(message);
         })
     }
 
@@ -80,8 +79,13 @@ const Login = ({operation}) => {
     },[])
 
     return (
-        <Container maxWidth="lg">
+        <Container maxWidth="">
             <Box className={`login-box-container`}>
+                {errorMessage &&
+                    <Box className={`alert-pop-login`}>
+                        <Alert severity="error">{errorMessage}</Alert>
+                    </Box>
+                }
                 <Box className={`login-form-container`} style={{
                     height: operation === 'login' ? `380px` : `480px`
                 }}>
@@ -92,42 +96,40 @@ const Login = ({operation}) => {
                         {operation === "login" ? "Login Here to continue" : "Register Here to continue"}
                     </Box>
                     <Box className={`d-flex-j-center flex-column p-3 ps-4 pe-4`}>
-                        <ThemeProvider theme={loginFieldsTheme}>
-                            {operation === "login" ? (
-                                <>
-                                    <TextField id="standard-basic" label="Username/Email" variant="outlined" onChange={e => setUsername(e.target.value)}/><br/>
-                                    <TextField id="standard-basic" label="Password" variant="outlined" type="password" onChange={e => setPassword(e.target.value)}/>
-                                    <Button onClick={handleLogin} variant={`contained`} className={`mt-4`}>Log In</Button>
-                                    <Link className={`mt-3 text-center`}  href={`/register`}>Click Here to Register</Link>
-                                </>
-                            ): (
-                                <>
-                                    <Grid2 container spacing={4}>
-                                        <Grid2 className={`d-flex-j-center`} size={6}>
-                                            <TextField id="standard-basic" label="Username" variant="outlined" onChange={e => setUsername(e.target.value)}/><br/>
-                                        </Grid2>
-                                        <Grid2 className={`d-flex-j-center`} size={6}>
-                                            <TextField id="standard-basic" label="Email" variant="outlined" onChange={e => setEmail(e.target.value)}/><br/>
-                                        </Grid2>
-                                        <Grid2 className={`d-flex-j-center`} size={6}>
-                                            <TextField id="standard-basic" label="firstName" variant="outlined" onChange={e => setFirstName(e.target.value)}/><br/>
-                                        </Grid2>
-                                        <Grid2 className={`d-flex-j-center`} size={6}>
-                                            <TextField id="standard-basic" label="lastName" variant="outlined" onChange={e => setLastName(e.target.value)}/><br/>
-                                        </Grid2>
-                                        <Grid2 className={`d-flex-j-center`} size={6}>
-                                            <TextField id="standard-basic" label="Password" variant="outlined" type="password" onChange={e => setPassword(e.target.value)}/>
-                                        </Grid2>
-                                        <Grid2 className={`d-flex-j-center`} size={6}>
-                                            <TextField id="standard-basic" label="Confirm Password" variant="outlined" type="password" onChange={e => setConfirmPassword(e.target.value)}/>
-                                        </Grid2>
+                        {operation === "login" ? (
+                            <>
+                                <TextField id="standard-basic" label="Username/Email" variant="outlined" onChange={e => setUsername(e.target.value)}/><br/>
+                                <TextField id="standard-basic" label="Password" variant="outlined" type="password" onChange={e => setPassword(e.target.value)}/>
+                                <Button onClick={handleLogin} variant={`contained`} className={`mt-4`}>Log In</Button>
+                                <Link className={`mt-3 text-center`}  href={`/register`}>Click Here to Register</Link>
+                            </>
+                        ): (
+                            <>
+                                <Grid2 container spacing={4}>
+                                    <Grid2 className={`d-flex-j-center`} size={6}>
+                                        <TextField id="standard-basic" label="Username" variant="outlined" onChange={e => setUsername(e.target.value)}/><br/>
                                     </Grid2>
-                                    <Button onClick={handleRegister} variant={`contained`} className={`mt-4`}>Sign In</Button>
-                                    <Link className={`mt-3 text-center`} href={`/login`}>Click Here to Login</Link>
-                                </>
+                                    <Grid2 className={`d-flex-j-center`} size={6}>
+                                        <TextField id="standard-basic" label="Email" variant="outlined" onChange={e => setEmail(e.target.value)}/><br/>
+                                    </Grid2>
+                                    <Grid2 className={`d-flex-j-center`} size={6}>
+                                        <TextField id="standard-basic" label="firstName" variant="outlined" onChange={e => setFirstName(e.target.value)}/><br/>
+                                    </Grid2>
+                                    <Grid2 className={`d-flex-j-center`} size={6}>
+                                        <TextField id="standard-basic" label="lastName" variant="outlined" onChange={e => setLastName(e.target.value)}/><br/>
+                                    </Grid2>
+                                    <Grid2 className={`d-flex-j-center`} size={6}>
+                                        <TextField id="standard-basic" label="Password" variant="outlined" type="password" onChange={e => setPassword(e.target.value)}/>
+                                    </Grid2>
+                                    <Grid2 className={`d-flex-j-center`} size={6}>
+                                        <TextField id="standard-basic" label="Confirm Password" variant="outlined" type="password" onChange={e => setConfirmPassword(e.target.value)}/>
+                                    </Grid2>
+                                </Grid2>
+                                <Button onClick={handleRegister} variant={`contained`} className={`mt-4`}>Sign In</Button>
+                                <Link className={`mt-3 text-center`} href={`/login`}>Click Here to Login</Link>
+                            </>
 
-                            )}
-                        </ThemeProvider>
+                        )}
                     </Box>
                 </Box>
             </Box>
