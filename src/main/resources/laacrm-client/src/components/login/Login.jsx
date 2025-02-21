@@ -1,10 +1,11 @@
 import "./Login.css";
-import {Box, Button, Container, Grid2, TextField, Link, Alert} from "@mui/material";
+import {Box, Container, Grid2, TextField, Link, Alert} from "@mui/material";
 import {useEffect, useState} from "react";
 import axios from "axios";
 import authService from "../../api/authService";
 import {useNavigate} from "react-router-dom";
 import apiEngine from "../../api/apiEngine";
+import {XButton} from "../UIComponents";
 
 const Login = ({operation}) => {
 
@@ -100,7 +101,7 @@ const Login = ({operation}) => {
                             <>
                                 <TextField id="standard-basic" label="Username/Email" variant="outlined" onChange={e => setUsername(e.target.value)}/><br/>
                                 <TextField id="standard-basic" label="Password" variant="outlined" type="password" onChange={e => setPassword(e.target.value)}/>
-                                <Button onClick={handleLogin} variant={`contained`} className={`mt-4`}>Log In</Button>
+                                <XButton label="Log In" variant="contained" onClick={handleLogin} className={`mt-4`}/>
                                 <Link className={`mt-3 text-center`}  href={`/register`}>Click Here to Register</Link>
                             </>
                         ): (
@@ -125,7 +126,7 @@ const Login = ({operation}) => {
                                         <TextField id="standard-basic" label="Confirm Password" variant="outlined" type="password" onChange={e => setConfirmPassword(e.target.value)}/>
                                     </Grid2>
                                 </Grid2>
-                                <Button onClick={handleRegister} variant={`contained`} className={`mt-4`}>Sign In</Button>
+                                <XButton label="Sign In" variant="contained" onClick={handleLogin} className={`mt-4`}/>
                                 <Link className={`mt-3 text-center`} href={`/login`}>Click Here to Login</Link>
                             </>
 

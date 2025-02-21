@@ -6,6 +6,7 @@ import Login from "../components/login/Login";
 import RecordCreate from "../components/module/create/RecordCreatePage/RecordCreate";
 import Redirect from "./Redirect";
 import RecordList from "../components/module/RecordList/RecordList";
+import RecordDetail from "../components/module/RecordDetail/RecordDetail";
 
 const Router = () => {
     return (
@@ -31,6 +32,10 @@ const authRoutes = () => (
                         <Route path=":layoutId" element={<RecordCreate/>} />
                     </Route>
                     <Route path="list" element={<RecordList/>}/>
+                    <Route path=":recordId" element={<Redirect/>}>
+                        <Route path="detail" element={<RecordDetail/>}/>
+                        <Route path="edit" element={<RecordCreate operation={`edit`}/>}/>
+                    </Route>
                 </Route>
             </Route>
         </Route>

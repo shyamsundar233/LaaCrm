@@ -20,7 +20,7 @@ import {Container} from \"@mui/material\";
 
 const $COMPONENT_NAME = () => {
     return (
-        <Container maxWidth=\"\" className={\`outlet-parent-cont\`}>
+        <Container maxWidth=\"\">
             $COMPONENT_NAME Component
         </Container>
     );

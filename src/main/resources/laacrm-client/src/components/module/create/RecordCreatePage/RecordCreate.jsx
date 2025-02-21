@@ -1,14 +1,15 @@
 import "./RecordCreate.css";
-import {Alert, Box, Button, Container, Grid2, MenuItem, Select, TextField, Typography} from "@mui/material";
+import {Alert, Box, Container, Grid2, MenuItem, Select, TextField, Typography} from "@mui/material";
 import {useEffect, useState} from "react";
 import {useSelector} from "react-redux";
 import {useNavigate, useParams} from "react-router-dom";
 import apiEngine from "../../../../api/apiEngine";
+import {XButton} from "../../../UIComponents";
 
-const RecordCreate = () => {
+const RecordCreate = ({operation}) => {
 
     const navigate = useNavigate();
-    const {moduleName, layoutId} = useParams();
+    const {moduleName, layoutId, recordId} = useParams();
     const modules = useSelector(state => state.module.modules);
     const [isLoading, setIsLoading] = useState(true);
     const [module, setModule] = useState({});
@@ -18,13 +19,10 @@ const RecordCreate = () => {
     const [errorMessage, setErrorMessage] = useState("");
 
     useEffect(() => {
-        let moduleObj = modules.find(elem => elem.moduleName === moduleName);
-        if(moduleObj) {
-            setModule(moduleObj);
-            setIsLoading(false);
-            let layoutObj = moduleObj.layouts.find(layout => layout.layoutId === layoutId);
-            setLayout(layoutObj);
-            setFields(layoutObj.fields);
+        if(operation === "edit") {
+            editInitialLoad();
+        }else {
+            createInitialLoad();
         }
     },[modules, moduleName]);
 
@@ -33,6 +31,32 @@ const RecordCreate = () => {
             setErrorMessage("");
         }, 3000)
     },[errorMessage]);
+
+    const createInitialLoad = () => {
+        let moduleObj = modules.find(elem => elem.moduleName === moduleName);
+        if(moduleObj) {
+            setModule(moduleObj);
+            setIsLoading(false);
+            let layoutObj = moduleObj.layouts.find(layout => layout.layoutId === layoutId);
+            setLayout(layoutObj);
+            setFields(layoutObj.fields);
+        }
+    }
+
+    const editInitialLoad = () => {
+        let moduleObj = modules.find(elem => elem.moduleName === moduleName);
+        apiEngine.requestHelper("GET", `/v1/api/${moduleObj.moduleId}/record/${recordId}`).then((response) => {
+            let recordObj = response.data.data.record;
+            if(moduleObj) {
+                setModule(moduleObj);
+                setIsLoading(false);
+                let layoutObj = moduleObj.layouts.find(layout => layout.layoutId === recordObj.layoutId);
+                setLayout(layoutObj);
+                setFields(layoutObj.fields);
+                setRecordDetails(recordObj.recordDetails);
+            }
+        })
+    }
 
     const onFieldValueChange = (fieldName, fieldValue) => {
         let recordDtls = recordDetails;
@@ -88,8 +112,8 @@ const RecordCreate = () => {
                     <Box className={`d-flex`}>
                         <Typography className={`heading-1`}>Create {module.singularName} - {layout.layoutName}</Typography>
                         <Box className={`ms-auto me-3`}>
-                            <Button variant={`outlined`} className={`me-2`} onClick={() => navigate(`/app/module/${moduleName}/list`)}>Cancel</Button>
-                            <Button variant={`contained`} onClick={onRecordCreate}>Create</Button>
+                            <XButton label="Cancel" variant={`outlined`} className={`me-2`} onClick={() => navigate(`/app/module/${moduleName}/list`)}/>
+                            <XButton label="Create" variant={`contained`} onClick={onRecordCreate}/>
                         </Box>
                     </Box>
                     <Box className={`mt-5`}>
@@ -146,7 +170,8 @@ const Field = ({field, fieldProps, recordDetails, onValueChange}) => {
                     fullWidth
                     onChange={(event) => onValueChange(field.fieldName, event.target.value)}
                     variant={`outlined`}
-                    value={defValue}
+                    defaultValue={defValue}
+                    value={recordDetails[field.fieldName]}
                 >
                     {options.map((option, index) => (
                         <MenuItem value={option}>{option}</MenuItem>

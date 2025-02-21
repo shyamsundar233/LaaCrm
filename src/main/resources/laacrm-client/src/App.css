@@ -13,8 +13,8 @@
 }
 
 .d-flex-j-center {
-    display: flex;
-    justify-content: center;
+    display: flex !important;
+    justify-content: center !important;
 }
 
 .d-flex-a-center {

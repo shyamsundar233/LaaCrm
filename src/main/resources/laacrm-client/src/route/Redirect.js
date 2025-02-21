@@ -4,7 +4,7 @@ import {useEffect} from "react";
 
 const Redirect = () => {
 
-    const {moduleName} = useParams();
+    const {moduleName, recordId} = useParams();
     const navigate = useNavigate();
     const location = useLocation();
     const modules = useSelector((state) => state.module.modules);
@@ -17,6 +17,9 @@ const Redirect = () => {
                 break;
             case `/app/module/${moduleName}/create`:
                 createPageHelper();
+                break;
+            case `/app/module/${moduleName}/${recordId}`:
+                recordDetailPageHelper();
                 break;
         }
     },[location.pathname]);
@@ -35,6 +38,10 @@ const Redirect = () => {
             let layout = module.layouts[0];
             navigate(`/app/module/${moduleName}/create/${layout.layoutId}`);
         }
+    }
+
+    const recordDetailPageHelper = () => {
+        navigate(`/app/module/${moduleName}/${recordId}/detail`);
     }
 
     return (<Outlet/>);

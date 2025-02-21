@@ -1,5 +1,5 @@
 import "./RecordList.css";
-import {Box, Button, Container, Paper, Typography} from "@mui/material";
+import {Box, Container, Paper, Typography} from "@mui/material";
 import {useNavigate, useParams} from "react-router-dom";
 import {useDispatch, useSelector} from "react-redux";
 import {useEffect, useState} from "react";
@@ -7,6 +7,7 @@ import {DataGrid} from "@mui/x-data-grid";
 import apiEngine from "../../../api/apiEngine";
 import {loadRecords} from "../../../data/slice/recordSlice";
 import Banner from "../banner/Banner";
+import {XButton} from "../../UIComponents";
 
 const RecordList = () => {
 
@@ -63,6 +64,10 @@ const RecordList = () => {
         setNoRecords(true);
     }
 
+    const handleRowClick = (elem) => {
+        navigate(`/app/module/${moduleName}/${elem.id}/detail`)
+    }
+
     if(isLoading) {
         return (<Box>Loading...</Box>)
     }else {
@@ -75,7 +80,7 @@ const RecordList = () => {
                         <Box className={`d-flex`}>
                             <Typography className={`heading-1`}>All {module.pluralName}</Typography>
                             <Box className={`ms-auto me-3`}>
-                                <Button variant={`contained`} className={`me-2`} onClick={() => navigate(`/app/module/${moduleName}/create`)}>Create {module.singularName}</Button>
+                                <XButton label={`Create ${module.singularName}`} variant={`contained`} className={`me-2`} onClick={() => navigate(`/app/module/${moduleName}/create`)}/>
                             </Box>
                         </Box>
                         <Paper className={`mt-3`} sx={{ height: "80vh", width: '100%' }}>
@@ -85,6 +90,7 @@ const RecordList = () => {
                                 rows={rows}
                                 checkboxSelection
                                 sx={{ border: 0 }}
+                                onRowClick={handleRowClick}
                             />
                         </Paper>
                     </Box>

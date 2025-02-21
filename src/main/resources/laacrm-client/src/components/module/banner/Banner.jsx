@@ -1,5 +1,5 @@
 import "./Banner.css";
-import {Box, Button, Container} from "@mui/material";
+import {Box, Container} from "@mui/material";
 import {useNavigate, useParams} from "react-router-dom";
 import {useEffect, useState} from "react";
 import {useSelector} from "react-redux";
@@ -9,6 +9,7 @@ import AccountsIcon from "../../asset/building.png";
 import ProductsIcon from "../../asset/box.png";
 import VendorsIcon from "../../asset/handshake.png";
 import SalesIcon from "../../asset/salary.png";
+import {XButton} from "../../UIComponents";
 
 const Banner = () => {
 
@@ -44,7 +45,7 @@ const Banner = () => {
                             Welcome to <b> &nbsp; {module ? module.pluralName : ""} &nbsp; </b> Module
                         </Box>
                         <Box className={`d-flex-j-center-a-center mt-4 pointer`}>
-                            <Button onClick={() => navigate(`/app/module/${module.moduleName}/create`)} className={`create-btn-banner`} variant="contained">Create {module ? module.singularName : ""}</Button>
+                            <XButton label={`Create ${module ? module.singularName : ""}`} onClick={() => navigate(`/app/module/${module.moduleName}/create`)} className={`create-btn-banner`} variant="contained"/>
                         </Box>
                     </Box>
                 </Box>
