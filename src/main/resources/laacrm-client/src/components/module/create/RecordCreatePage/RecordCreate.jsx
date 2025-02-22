@@ -19,6 +19,7 @@ const RecordCreate = ({operation}) => {
     const [errorMessage, setErrorMessage] = useState("");
 
     useEffect(() => {
+        operation = operation === null ? recordId ? "edit" : "create" : operation;
         if(operation === "edit") {
             editInitialLoad();
         }else {
@@ -59,10 +60,11 @@ const RecordCreate = ({operation}) => {
     }
 
     const onFieldValueChange = (fieldName, fieldValue) => {
-        let recordDtls = recordDetails;
-        recordDtls[fieldName] = fieldValue;
-        setRecordDetails(recordDtls);
-    }
+        setRecordDetails(prevState => ({
+            ...prevState,
+            [fieldName]: fieldValue
+        }));
+    };
 
     const onRecordCreate = () => {
         if(validate()){
@@ -71,9 +73,17 @@ const RecordCreate = ({operation}) => {
                 layoutId: layout.layoutId,
                 recordDetails: recordDetails
             }
-            apiEngine.requestHelper("POST", `/v1/api/${module.moduleId}/record`, data).then(res => {
-                navigate(`/app/module/${module.moduleName}`);
-            })
+            if(operation === "edit") {
+                data.recordId = recordId;
+                apiEngine.requestHelper("PUT", `/v1/api/${module.moduleId}/record`, data).then(res => {
+                    debugger
+                    navigate(`/app/module/${module.moduleName}`);
+                })
+            }else {
+                apiEngine.requestHelper("POST", `/v1/api/${module.moduleId}/record`, data).then(res => {
+                    navigate(`/app/module/${module.moduleName}`);
+                })
+            }
         }
     }
 
@@ -131,78 +141,70 @@ const RecordCreate = ({operation}) => {
     )
 }
 
-const Field = ({field, fieldProps, recordDetails, onValueChange}) => {
-
+const Field = ({ field, fieldProps, recordDetails, onValueChange }) => {
     const [options, setOptions] = useState([]);
     const [defValue, setDefValue] = useState(null);
     const [isMandatory, setIsMandatory] = useState(false);
 
     useEffect(() => {
-        setIsMandatory(fieldProps.find(prop => prop.propertyName === "isMandatory").propertyValue === "true");
-       if(field.fieldType === '4'){
-           setOptions(JSON.parse(fieldProps.find(prop => prop.propertyName === "options").propertyValue.replace(/'/g, '"')));
-           setDefValue(fieldProps.find(prop => prop.propertyName === "defValue").propertyValue);
-       }
-    },[])
-
-
-    const FieldElem = () => {
-        switch (field.fieldType) {
-            case '1':
-            case '6':
-            case '7':
-                return <TextField
-                    variant="outlined"
-                    fullWidth
-                    value={recordDetails[field.fieldName]}
-                    onChange={(event) => onValueChange(field.fieldName, event.target.value)}
-                />;
-            case '3':
-            case '9':
-                return <TextField
-                    variant="outlined"
-                    type="number"
-                    fullWidth
-                    onChange={(event) => onValueChange(field.fieldName, event.target.value)}
-                />
-            case '4':
-                return <Select
-                    fullWidth
-                    onChange={(event) => onValueChange(field.fieldName, event.target.value)}
-                    variant={`outlined`}
-                    defaultValue={defValue}
-                    value={recordDetails[field.fieldName]}
-                >
-                    {options.map((option, index) => (
-                        <MenuItem value={option}>{option}</MenuItem>
-                    ))}
-                </Select>
-            case '8':
-                return <TextField
-                    variant="outlined"
-                    type="email"
-                    fullWidth
-                    onChange={(event) => onValueChange(field.fieldName, event.target.value)}
-                />
-            case '10':
-                return <TextField
-                    variant="outlined"
-                    type="url"
-                    fullWidth
-                    onChange={(event) => onValueChange(field.fieldName, event.target.value)}
-                />
+        setIsMandatory(fieldProps.find(prop => prop.propertyName === "isMandatory")?.propertyValue === "true");
+        if (field.fieldType === '4') {
+            setOptions(JSON.parse(fieldProps.find(prop => prop.propertyName === "options")?.propertyValue.replace(/'/g, '"')));
+            setDefValue(fieldProps.find(prop => prop.propertyName === "defValue")?.propertyValue);
         }
-    }
+    }, []);
 
     return (
         <Container key={`field_${field.fieldId}_elem`} className={`d-flex-a-center w-100`}>
-            <Typography variant={`subtitle1`} style={{width: "30%"}}>
+            <Typography variant={`subtitle1`} style={{ width: "30%" }}>
                 {field.fieldName}
                 {isMandatory ? <span className={`text-danger ms-1`}>*</span> : null}
             </Typography>
-            <FieldElem/>
+            {field.fieldType === '1' || field.fieldType === '6' || field.fieldType === '7' ? (
+                <TextField
+                    variant="outlined"
+                    fullWidth
+                    value={recordDetails[field.fieldName] || ""}
+                    onChange={(event) => onValueChange(field.fieldName, event.target.value)}
+                />
+            ) : field.fieldType === '3' || field.fieldType === '9' ? (
+                <TextField
+                    variant="outlined"
+                    type="number"
+                    fullWidth
+                    value={recordDetails[field.fieldName] || ""}
+                    onChange={(event) => onValueChange(field.fieldName, event.target.value)}
+                />
+            ) : field.fieldType === '4' ? (
+                <Select
+                    fullWidth
+                    variant="outlined"
+                    value={recordDetails[field.fieldName] || defValue || ""}
+                    onChange={(event) => onValueChange(field.fieldName, event.target.value)}
+                >
+                    {options.map((option, index) => (
+                        <MenuItem key={index} value={option}>{option}</MenuItem>
+                    ))}
+                </Select>
+            ) : field.fieldType === '8' ? (
+                <TextField
+                    variant="outlined"
+                    type="email"
+                    fullWidth
+                    value={recordDetails[field.fieldName] || ""}
+                    onChange={(event) => onValueChange(field.fieldName, event.target.value)}
+                />
+            ) : field.fieldType === '10' ? (
+                <TextField
+                    variant="outlined"
+                    type="url"
+                    fullWidth
+                    value={recordDetails[field.fieldName] || ""}
+                    onChange={(event) => onValueChange(field.fieldName, event.target.value)}
+                />
+            ) : null}
         </Container>
-    )
-}
+    );
+};
 
 export default RecordCreate;

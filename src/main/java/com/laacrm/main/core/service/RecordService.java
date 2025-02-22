@@ -131,10 +131,14 @@ public class RecordService {
             query.append("UPDATE ")
                     .append(getRecordTableNameForModule(module))
                     .append(" SET ");
-            for(Field field : fields){
+            for(int index = 0 ; index < fields.size(); index++){
+                Field field = fields.get(index);
                 String colName = field.getRecColName().split("::")[1];
-                query.append(colName)
-                        .append(" = :").append(colName);
+                if(index == fields.size() - 1){
+                    query.append(colName).append(" = :").append(colName);
+                }else {
+                    query.append(colName).append(" = :").append(colName).append(", ");
+                }
             }
             query.append(" WHERE record_id = :recordId");
             Query entQuery = entityManager.createNativeQuery(query.toString());
