@@ -1,4 +1,5 @@
-import {Button} from "@mui/material";
+import {Alert, Button} from "@mui/material";
+import ReactDOM from "react-dom/client";
 
 export const XButton = ({label, variant, className, onClick}) => {
 
@@ -25,4 +26,20 @@ export const XButton = ({label, variant, className, onClick}) => {
     }
 
     return (<Button className={className} style={sx} onClick={onClick}>{label}</Button>)
+}
+
+export const UiUtils = {
+    showAlert : (message, variant) => {
+        let sx = {
+            display: "flex",
+            position: "absolute",
+            top: "6px"
+        }
+        setTimeout(() => {
+            document.getElementById("app-alert-elem").style.display = "none";
+        },[3000]);
+
+        const root = ReactDOM.createRoot(document.getElementById("app-alert"));
+        root.render(<Alert id="app-alert-elem" style={sx} severity={variant}>{message}</Alert>);
+    }
 }

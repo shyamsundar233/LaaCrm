@@ -1,11 +1,11 @@
 import "./Login.css";
-import {Box, Container, Grid2, TextField, Link, Alert} from "@mui/material";
+import {Box, Container, Grid2, TextField, Link} from "@mui/material";
 import {useEffect, useState} from "react";
 import axios from "axios";
 import authService from "../../api/authService";
 import {useNavigate} from "react-router-dom";
 import apiEngine from "../../api/apiEngine";
-import {XButton} from "../UIComponents";
+import {UiUtils, XButton} from "../UIComponents";
 
 const Login = ({operation}) => {
 
@@ -16,13 +16,6 @@ const Login = ({operation}) => {
     const [email, setEmail] = useState("");
     const [firstName, setFirstName] = useState("");
     const [lastName, setLastName] = useState("");
-    const [errorMessage, setErrorMessage] = useState("");
-
-    useEffect(() => {
-        setTimeout(() => {
-            setErrorMessage("");
-        }, 3000)
-    },[errorMessage]);
 
     const handleLogin = () => {
         axios.post("/v1/api/users/login", {username, password}).then(res => {
@@ -42,7 +35,7 @@ const Login = ({operation}) => {
                     message = "Enter valid credentials !!!";
                     break;
             }
-            setErrorMessage(message);
+            UiUtils.showAlert(message, "error");
         })
     }
 
@@ -60,7 +53,7 @@ const Login = ({operation}) => {
         axios.post("/v1/api/users/saveUser", data).then(res => {
             navigate("/login");
         }).catch(err => {
-            alert(err.response.data.message);
+            UiUtils.showAlert(err.response.data.message, "error");
         })
     }
 
@@ -82,11 +75,6 @@ const Login = ({operation}) => {
     return (
         <Container maxWidth="">
             <Box className={`login-box-container`}>
-                {errorMessage &&
-                    <Box className={`alert-pop-login`}>
-                        <Alert severity="error">{errorMessage}</Alert>
-                    </Box>
-                }
                 <Box className={`login-form-container`} style={{
                     height: operation === 'login' ? `380px` : `480px`
                 }}>
@@ -101,7 +89,7 @@ const Login = ({operation}) => {
                             <>
                                 <TextField id="standard-basic" label="Username/Email" variant="outlined" onChange={e => setUsername(e.target.value)}/><br/>
                                 <TextField id="standard-basic" label="Password" variant="outlined" type="password" onChange={e => setPassword(e.target.value)}/>
-                                <XButton label="Log In" variant="contained" onClick={handleLogin} className={`mt-4`}/>
+                                <XButton label="Log In" variant="contained" onClick={handleRegister} className={`mt-4`}/>
                                 <Link className={`mt-3 text-center`}  href={`/register`}>Click Here to Register</Link>
                             </>
                         ): (

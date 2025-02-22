@@ -1,5 +1,5 @@
 import './App.css';
-import {Container, createTheme, ThemeProvider} from "@mui/material";
+import {Box, Container, createTheme, ThemeProvider} from "@mui/material";
 import {Outlet, useNavigate} from "react-router-dom";
 import Title from "./components/title/Title";
 import SideBar from "./components/sideBar/SideBar";
@@ -79,7 +79,8 @@ const App = () => {
                   Loading....
               </Container>
           ) : (
-              <Container maxWidth="" className={`app-parent-cont`}>
+              <Container maxWidth="" id="app-root" className={`app-parent-cont`}>
+                  <Box id="app-alert" className={`d-flex-j-center`}></Box>
                   <Title/>
                   <Container maxWidth="" className={`d-flex`}>
                       <SideBar/>

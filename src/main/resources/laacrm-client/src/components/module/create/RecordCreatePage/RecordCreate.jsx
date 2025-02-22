@@ -1,10 +1,10 @@
 import "./RecordCreate.css";
-import {Alert, Box, Container, Grid2, MenuItem, Select, TextField, Typography} from "@mui/material";
+import {Box, Container, Grid2, MenuItem, Select, TextField, Typography} from "@mui/material";
 import {useEffect, useState} from "react";
 import {useSelector} from "react-redux";
 import {useNavigate, useParams} from "react-router-dom";
 import apiEngine from "../../../../api/apiEngine";
-import {XButton} from "../../../UIComponents";
+import {UiUtils, XButton} from "../../../UIComponents";
 
 const RecordCreate = ({operation}) => {
 
@@ -16,7 +16,6 @@ const RecordCreate = ({operation}) => {
     const [layout, setLayout] = useState([]);
     const [fields, setFields] = useState([]);
     const [recordDetails, setRecordDetails] = useState({});
-    const [errorMessage, setErrorMessage] = useState("");
 
     useEffect(() => {
         operation = operation === null ? recordId ? "edit" : "create" : operation;
@@ -26,12 +25,6 @@ const RecordCreate = ({operation}) => {
             createInitialLoad();
         }
     },[modules, moduleName]);
-
-    useEffect(() => {
-        setTimeout(() => {
-            setErrorMessage("");
-        }, 3000)
-    },[errorMessage]);
 
     const createInitialLoad = () => {
         let moduleObj = modules.find(elem => elem.moduleName === moduleName);
@@ -75,12 +68,13 @@ const RecordCreate = ({operation}) => {
             }
             if(operation === "edit") {
                 data.recordId = recordId;
-                apiEngine.requestHelper("PUT", `/v1/api/${module.moduleId}/record`, data).then(res => {
-                    debugger
+                apiEngine.requestHelper("PUT", `/v1/api/${module.moduleId}/record`, data).then(() => {
+                    UiUtils.showAlert("Record Updated Successfully!!", "success");
                     navigate(`/app/module/${module.moduleName}`);
                 })
             }else {
-                apiEngine.requestHelper("POST", `/v1/api/${module.moduleId}/record`, data).then(res => {
+                apiEngine.requestHelper("POST", `/v1/api/${module.moduleId}/record`, data).then(() => {
+                    UiUtils.showAlert("Record Created Successfully!!", "success");
                     navigate(`/app/module/${module.moduleName}`);
                 })
             }
@@ -94,12 +88,12 @@ const RecordCreate = ({operation}) => {
             for(let index1 = 0; index1 < props.length; index1++) {
                 let prop = props[index1];
                 if(prop.propertyName === "isMandatory" && prop.propertyValue === 'true' && !recordDetails[field.fieldName]){
-                    setErrorMessage(`${field.fieldName} is mandatory`);
+                    UiUtils.showAlert(`${field.fieldName} is mandatory`, "error");
                     return false;
                 }else if(prop.propertyName === "maxChar" && recordDetails[field.fieldName]){
                     let maxChar = parseInt(prop.propertyValue);
                     if(recordDetails[field.fieldName].length > maxChar){
-                        setErrorMessage(`Limit Exceeded, ${field.fieldName} allows only ${maxChar} characters`);
+                        UiUtils.showAlert(`Limit Exceeded, ${field.fieldName} allows only ${maxChar} characters`, "error");
                         return false;
                     }
                 }
@@ -110,11 +104,6 @@ const RecordCreate = ({operation}) => {
 
     return (
         <Container maxWidth="">
-            {errorMessage &&
-                <Box className={`alert-pop-rec-create`}>
-                    <Alert severity="error">{errorMessage}</Alert>
-                </Box>
-            }
             {isLoading ? (
                 <Box>Loading....</Box>
             ) : (
@@ -123,7 +112,7 @@ const RecordCreate = ({operation}) => {
                         <Typography className={`heading-1`}>Create {module.singularName} - {layout.layoutName}</Typography>
                         <Box className={`ms-auto me-3`}>
                             <XButton label="Cancel" variant={`outlined`} className={`me-2`} onClick={() => navigate(`/app/module/${moduleName}/list`)}/>
-                            <XButton label="Create" variant={`contained`} onClick={onRecordCreate}/>
+                            <XButton label={operation === "edit" ? "Edit" : "Create"} variant={`contained`} onClick={onRecordCreate}/>
                         </Box>
                     </Box>
                     <Box className={`mt-5`}>
