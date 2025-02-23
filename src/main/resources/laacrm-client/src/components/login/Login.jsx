@@ -89,7 +89,7 @@ const Login = ({operation}) => {
                             <>
                                 <TextField id="standard-basic" label="Username/Email" variant="outlined" onChange={e => setUsername(e.target.value)}/><br/>
                                 <TextField id="standard-basic" label="Password" variant="outlined" type="password" onChange={e => setPassword(e.target.value)}/>
-                                <XButton label="Log In" variant="contained" onClick={handleRegister} className={`mt-4`}/>
+                                <XButton label="Log In" variant="contained" onClick={handleLogin} className={`mt-4`}/>
                                 <Link className={`mt-3 text-center`}  href={`/register`}>Click Here to Register</Link>
                             </>
                         ): (

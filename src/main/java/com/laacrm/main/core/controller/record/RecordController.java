@@ -22,10 +22,10 @@ public class RecordController extends APIController {
     private final RecordService recordService;
 
     @GetMapping("/{moduleId}/record")
-    public ResponseEntity<APIResponse> getAllRecords(@PathVariable(name = "moduleId") Long moduleId){
+    public ResponseEntity<APIResponse> getAllRecords(@PathVariable(name = "moduleId") Long moduleId, @RequestParam(name = "page", required = false) Integer page, @RequestParam(name = "limit", required = false) Integer limit){
         Map<String, Object> details = new HashMap<>();
         List<RecordDTO> recordDTOS = new ArrayList<>();
-        for(Record record : recordService.getAllRecordsForModule(moduleId)){
+        for(Record record : recordService.getAllRecordsForModule(moduleId, page, limit)){
             recordDTOS.add(getRecordDTOFromEntity(record));
         }
         details.put("records", recordDTOS);

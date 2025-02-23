@@ -157,13 +157,16 @@ public class RecordService {
         return module.getPluralName() + "_rec";
     }
 
-    public List<Record> getAllRecordsForModule(Long moduleId) {
+    public List<Record> getAllRecordsForModule(Long moduleId, Integer page, Integer limit) {
+        page = page == null ? 1 : page;
+        page = page - 1;
+        limit = limit == null || limit > 500 ? 10 : limit;
         List<Record> records = new ArrayList<>();
         Module module = moduleService.findById(moduleId);
         if(module == null){
             throw new APIException(HttpStatus.NOT_FOUND.value(), "Module not found");
         }
-        List<Object[]> recordObj = entityManager.createNativeQuery("SELECT * from " + getRecordTableNameForModule(module)).getResultList();
+        List<Object[]> recordObj = entityManager.createNativeQuery("SELECT * from " + getRecordTableNameForModule(module) + " ORDER BY record_id DESC LIMIT " + limit + " OFFSET " + page * limit).getResultList();
         for (Object[] recObj : recordObj) {
             records.add(getRecordFromRecordObj(module, recObj));
         }
